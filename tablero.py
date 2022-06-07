@@ -1,7 +1,7 @@
 from tkinter import *
 from pygame import *
 import os, pygame, random
-
+import time
 #Esta funcion es para cargar las diferentes imagenes
 def cargarImagen(nombre): 
     """
@@ -29,6 +29,7 @@ def Fail():
     pygame.mixer.music.play(1)
 
 
+
 class Tablero: 
 
     
@@ -45,13 +46,13 @@ class Tablero:
 
         self.Acierto= 0
         self.Fallos= 0
-        self.BarcosA= 5
-        self.BarcosB= 3 
-        self.BarcosC= 2 
+        self.BarcosA= 1 #5
+        self.BarcosB= 1 #3
+        self.BarcosC= 10 #2
 
-
-        Cuadro= 60
-        Margen= 5
+        
+        Cuadro= 60 #Tamaño de los cuadros
+        Margen= 5 #Distancia entre cuadros
 
         matriz= []
 
@@ -73,7 +74,7 @@ class Tablero:
                 matriz[y][x]=0
                 Posicionate+= 1
         Posicionate = 0
-            
+        
         while Posicionate < self.BarcosB:
             x=random.randint(0,8)
             y=random.randint(0,8)
@@ -81,14 +82,14 @@ class Tablero:
             Cordenada1= matriz[y][x]
             if Posicion == "Vertical":
                 Cordenada2= matriz[y+1][x]
-                if Cordenada1!= 0 and Cordenada1 != 0 and Cordenada2 != 1 and Cordenada2 !=1:
+                if Cordenada1!= 0 and Cordenada1 != 1 and Cordenada2 != 0 and Cordenada2 !=1:
                     matriz[y][x]= 1
                     matriz[y+1][x]= 1
                     Posicionate+=1
             else:
 
                 Cordenada2= matriz[y][x+1]
-                if Cordenada1!= 0 and Cordenada1 != 0 and Cordenada2 != 1 and Cordenada2 !=1:
+                if Cordenada1!= 0 and Cordenada1 != 1 and Cordenada2 != 0 and Cordenada2 !=1:
                     matriz[y][x]= 1
                     matriz[y][x+1]= 1
                     Posicionate+=1
@@ -96,8 +97,8 @@ class Tablero:
         Posicionate= 0
         
         while Posicionate < self.BarcosC:
-            x=random.randint(0,5)
-            y=random.randint(0,5)
+            x=random.randint(0,6)
+            y=random.randint(0,6)
             Posicion= random.choice(["Vertical", "Horinzontal"])
             Cordenada1= matriz[y][x]
             if Posicion == "Vertical":
@@ -151,8 +152,8 @@ class Tablero:
                     #if evento.key == pygame.K_a:
                         posicion = pygame.mouse.get_pos()
                         print(posicion)
-                        columna = posicion[0] // 65
-                        fila= posicion[1] // 65
+                        columna = posicion[0] // (Cuadro+Margen)
+                        fila= posicion[1] // (Cuadro+Margen)
                         #print(columna)
                         #print(fila)
                         Cordenada= matriz[fila][columna]
