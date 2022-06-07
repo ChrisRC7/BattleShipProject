@@ -46,9 +46,9 @@ class Tablero:
 
         self.Acierto= 0
         self.Fallos= 0
-        self.BarcosA= 1 #5
-        self.BarcosB= 1 #3
-        self.BarcosC= 10 #2
+        self.BarcosA= 5 #5
+        self.BarcosB= 3 #3
+        self.BarcosC= 2 #2
 
         
         Cuadro= 60 #Tamaño de los cuadros
