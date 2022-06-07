@@ -184,5 +184,5 @@ class Tablero:
             pygame.display.flip()
 
         pygame.quit()
-
+        
 Tablero()
