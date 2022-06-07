@@ -127,11 +127,6 @@ class Tablero:
                     matriz[y][x+3]= 2
                     Posicionate+=1
 
-        
-
-
-        
-
 
         self.pantalla.fill(Fondo)
         for fila in range(10):
@@ -188,3 +183,5 @@ class Tablero:
             pygame.display.flip()
 
         pygame.quit()
+
+Tablero()
