@@ -27,8 +27,16 @@ def Verifica(BarcosA, BarcosB, BarcosC):
         return
 
 def Fail():
-    pygame.mixer.music.load("")
-    pygame.mixer.music.play(1)
+    pygame.mixer.init() # Inicializar todos los módulos Pygame importados
+    pygame.mixer.music.load("Adjuntos/fallo.wav")  # pone la cancion
+    pygame.mixer.music.play(1)  # reproduce la cancion
+    pygame.mixer.music.set_volume(0.5)  # el volumen de la musica
+
+def acierto():
+    pygame.mixer.init()# Inicializar todos los módulos Pygame importados
+    pygame.mixer.music.load("Adjuntos/explosion.wav")  # pone la cancion
+    pygame.mixer.music.play(1)  # reproduce la cancion
+    pygame.mixer.music.set_volume(0.5)  # el volumen de la musica
 
 def Play(BarcosA, BarcosB, BarcosC, Nombre):
     Tablero1= TableroEnemigo(BarcosA, BarcosB, BarcosC, Nombre)
@@ -186,6 +194,8 @@ class TableroEnemigo:
 
                             self.Acierto+=1
                             color= Acierto
+                            print("sexo")
+                            acierto()
                             pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
 
 
@@ -262,21 +272,6 @@ class TableroJugador:
                             color= aliado
                             pygame.draw.rect(self.pantallaJugador, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
                             Posicionate+=1
-                        
-                        """Posicionate1=0
-                        flag=False
-                        if Posicionate1 < self.BarcosB:
-                            matriz[fila][columna] = 1
-                            viejaMatriz=matriz[fila][columna]
-                            flag=True
-                            print("ya se ocupo")
-                            color= aliado
-                            pygame.draw.rect(self.pantallaJugador, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
-                        if flag ==  True:
-                            if viejaMatriz==matriz[fila-1][columna] or viejaMatriz==matriz[fila+1][columna] or viejaMatriz==matriz[fila][columna-1] or viejaMatriz==matriz[fila][columna+1]:
-                                color= aliado
-                                pygame.draw.rect(self.pantallaJugador, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
-                                Posicionate1+=1"""
 
 
 

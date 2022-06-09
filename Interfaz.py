@@ -97,7 +97,7 @@ size = "960x540+"+Screenwidth+"+"+Screenheight  #Por definir
 Interfaz.geometry(size)
 Interfaz.resizable(width= False, height= False)
 canvas= Canvas(Interfaz, width= 960, height=540)
-Fondo=cargarImagen("Fondo.png")
+Fondo=cargarImagen("fondo.png")
 canvas.create_image(-2, -2, image= Fondo, anchor=NW)
 titulo = Label(Interfaz, text="Introduzca su usuario",font=("Arial", 10), bg="grey")  # texto
 titulo.place(x=50, y=20)
