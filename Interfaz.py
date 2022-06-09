@@ -1,10 +1,13 @@
 """
 Interfaz Principal
 """
+from email import message
 from tkinter import *
+from tkinter import messagebox
 from pygame import *
 import os, pygame, random
 from tablero import *
+
 
 #Esta funcion es para cargar las diferentes imagenes
 def cargarImagen(nombre): 
@@ -23,10 +26,15 @@ def cargarImagen(nombre):
     return imagen
 
 
-def Verifica(BarcosA, BarcosB, BarcosC):
+def Verifica(BarcosA, BarcosB, BarcosC, Nombre):
     
-    if (BarcosA+(BarcosB*2)+(BarcosC*4)<=100):
-        return
+    if (BarcosA+(BarcosB*2)+(BarcosC*4))<=100 :
+        Play(BarcosA, BarcosB, BarcosC, Nombre)
+    else: 
+        messagebox.showinfo('Saturacion', 'Baje la cantidad de Barcos.')
+
+
+
 
 def Fail():
     pygame.mixer.music.load("")
@@ -70,7 +78,7 @@ def registro1():
     regis.mainloop()
 
 def jugar(BarcosA,BarcosB,BarcosC,Nusuario):
-    TableroEnemigo(BarcosA,BarcosB,BarcosC,Nusuario)
+    Play(BarcosA,BarcosB,BarcosC,Nusuario)
 
 #Interfaz
 Interfaz=Tk()
@@ -103,11 +111,11 @@ BarcosC.place(x=50, y=230)  # lugar
 #Jugar.place(x= 50, y= 260)
 ######################################################################
 menubar=Menu(Interfaz)#agrega menu
-menubar.add_command(label="ayuda",command=ayuda)#opcion
-menubar.add_command(label="Salón de la fama",command=Salón_de_la_fama)
-menubar.add_command(label="Abrir",command=Abrir)
-Interfaz.config(menu=menubar)#agrega al menu
-Jugar= Button(Interfaz, text= "Jugar", command=lambda: jugar(int(BarcosA.get()),int(BarcosB.get()),int(BarcosC.get()),Nusuario.get()))
+menubar.add_command(label="ayuda", command= ayuda)#opcion
+menubar.add_command(label="Salón de la fama",command= Salón_de_la_fama)
+menubar.add_command(label="Abrir",command= Abrir)
+Interfaz.config(menu= menubar)#agrega al menu
+Jugar= Button(Interfaz, text= "Jugar", command=lambda: Verifica( int(BarcosA.get()), int(BarcosB.get()), int(BarcosC.get()), Nusuario.get()))
 Jugar.place(x= 50, y= 260)
 
 

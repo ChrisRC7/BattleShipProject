@@ -3,7 +3,7 @@ from pygame import *
 import os, pygame, random
 import time
 
-from Interfaz import BarcosIA, BarcosIB, BarcosIC
+
 #Esta funcion es para cargar las diferentes imagenes
 def cargarImagen(nombre): 
     """
@@ -30,12 +30,13 @@ def Fail():
     pygame.mixer.music.load("")
     pygame.mixer.music.play(1)
 
-
+def Play(BarcosA, BarcosB, BarcosC, Nombre):
+    Tablero1= TableroEnemigo(BarcosA, BarcosB, BarcosC, Nombre)
 
 class TableroEnemigo: 
 
     
-    def __init__(self):
+    def __init__(self, BarcosA, BarcosB, BarcosC, Nombre):
         pygame.init()
         self.pantalla= pygame.display.set_mode([655, 655])
         pygame.display.set_caption("Guerra Naval")
@@ -48,9 +49,9 @@ class TableroEnemigo:
 
         self.Acierto= 0
         self.Fallos= 0
-        self.BarcosA= BarcosIA #5
-        self.BarcosB= BarcosIB #3
-        self.BarcosC= BarcosIC #2
+        self.BarcosA= BarcosA #5
+        self.BarcosB= BarcosB #3
+        self.BarcosC= BarcosC #2
 
         
         Cuadro= 60 #Tamaño de los cuadros
@@ -196,7 +197,6 @@ class TableroEnemigo:
 
         pygame.quit()
 
-TableroEnemigo()
 
 
 class TableroJugador:
@@ -290,6 +290,3 @@ class TableroJugador:
         pygame.quit()
     
 
-
-
-TableroJugador()
