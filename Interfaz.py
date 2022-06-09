@@ -33,12 +33,20 @@ def Verifica(BarcosA, BarcosB, BarcosC, Nombre):
     else: 
         messagebox.showinfo('Saturacion', 'Baje la cantidad de Barcos.')
 
-
-
+pygame.mixer.init()
 
 def Fail():
-    pygame.mixer.music.load("")
-    pygame.mixer.music.play(1)     
+    pygame.mixer.init() # Inicializar todos los módulos Pygame importados
+    pygame.mixer.music.load("Adjuntos/fallo.wav")  # pone la cancion
+    pygame.mixer.music.play(1)  # reproduce la cancion
+    pygame.mixer.music.set_volume(0.5)  # el volumen de la musica
+
+def acierto():
+    pygame.mixer.init()# Inicializar todos los módulos Pygame importados
+    pygame.mixer.music.load("Adjuntos/explosion.wav")  # pone la cancion
+    pygame.mixer.music.play(1)  # reproduce la cancion
+    pygame.mixer.music.set_volume(0.5)  # el volumen de la musica
+
 
 def ayuda():
     Acer=Toplevel(Interfaz)
@@ -117,6 +125,8 @@ menubar.add_command(label="Abrir",command= Abrir)
 Interfaz.config(menu= menubar)#agrega al menu
 Jugar= Button(Interfaz, text= "Jugar", command=lambda: Verifica( int(BarcosA.get()), int(BarcosB.get()), int(BarcosC.get()), Nusuario.get()))
 Jugar.place(x= 50, y= 260)
+Jugar= Button(Interfaz, text= "Jugar", command=lambda: acierto())
+Jugar.place(x= 50, y= 290)
 
 
 
