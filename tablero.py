@@ -1,8 +1,8 @@
-from tkinter import *
+from tkinter import PhotoImage
 from pygame import *
 import os, pygame, random
 import time
-
+import threading
 
 #Esta funcion es para cargar las diferentes imagenes
 def cargarImagen(nombre): 
@@ -20,11 +20,16 @@ def cargarImagen(nombre):
     imagen = PhotoImage(file=ruta) #Se crea la imagen  
     return imagen
 
+def Hilos(BarcosA, BarcosB, BarcosC, Nombre):
+    t1= threading.Thread(target= Play, args=(BarcosA, BarcosB, BarcosC, Nombre))
+    t1.start()
+    #time.sleep(5)
+    #t2= threading.Thread(target= Jugador)
+    #t2.start()
 
-def Verifica(BarcosA, BarcosB, BarcosC):
-    
-    if (BarcosA+(BarcosB*2)+(BarcosC*4)):
-        return
+
+
+
 
 def Fail():
     pygame.mixer.init() # Inicializar todos los módulos Pygame importados
@@ -39,14 +44,17 @@ def acierto():
     pygame.mixer.music.set_volume(0.5)  # el volumen de la musica
 
 def Play(BarcosA, BarcosB, BarcosC, Nombre):
-    Tablero1= TableroEnemigo(BarcosA, BarcosB, BarcosC, Nombre)
+    TableroIA= TableroEnemigo(BarcosA, BarcosB, BarcosC, Nombre)
+
+def Jugador():
+    TableroP= TableroJugador()
 
 class TableroEnemigo: 
 
     
     def __init__(self, BarcosA, BarcosB, BarcosC, Nombre):
         pygame.init()
-        self.pantalla= pygame.display.set_mode([655, 655])
+        self.pantalla= pygame.display.set_mode([1320, 655])
         pygame.display.set_caption("Guerra Naval")
 
         #Colores
@@ -140,16 +148,24 @@ class TableroEnemigo:
                     Posicionate+=1
 
 
+
         self.pantalla.fill(Fondo)
+
         for fila in range(10):
-            for columna in range(10):
+            for columna in range(0, 20):
                 color= Casillas
                 pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
 
                 pygame.display.flip()
-                
+            
+        for fila in range(10):
+            for columna in range(10, 20):
+                color= Acierto
+                pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
 
+                pygame.display.flip()
 
+        
         run= True
         reloj= pygame.time.Clock()
         while run:
@@ -165,9 +181,9 @@ class TableroEnemigo:
                         print(posicion)
                         columna = posicion[0] // (Cuadro+Margen)
                         fila= posicion[1] // (Cuadro+Margen)
-                        if columna==10:
+                        if columna>=10:
                             columna=9
-                        if fila==10:
+                        if fila>=10:
                             fila=9    
                         print(columna)
                         print(fila)
@@ -206,7 +222,7 @@ class TableroEnemigo:
             pygame.display.flip()
 
         pygame.quit()
-
+        
 
 
 class TableroJugador:
@@ -245,7 +261,7 @@ class TableroJugador:
                 pygame.draw.rect(self.pantallaJugador, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
 
                 pygame.display.flip()
-        
+        """
         run= True
         reloj= pygame.time.Clock()
         Posicionate=0
@@ -283,5 +299,7 @@ class TableroJugador:
             pygame.display.flip()
 
         pygame.quit()
-    
+    """
 
+
+Hilos(1, 2 ,3, "dsfdg")
