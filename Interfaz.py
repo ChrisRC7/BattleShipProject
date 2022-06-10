@@ -1,11 +1,14 @@
 """
 Interfaz Principal
 """
-from email import message
+
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 from tkinter import *
 from tkinter import messagebox
 from pygame import *
-import os, pygame, random
+import os, pygame, random, sys, win32gui
 from tablero import *
 
 
@@ -29,7 +32,7 @@ def cargarImagen(nombre):
 def Verifica(BarcosA, BarcosB, BarcosC, Nombre):
     
     if (BarcosA+(BarcosB*2)+(BarcosC*4))<=100 :
-        Play(BarcosA, BarcosB, BarcosC, Nombre)
+        Hilos(BarcosA, BarcosB, BarcosC, Nombre)
     else: 
         messagebox.showinfo('Saturacion', 'Baje la cantidad de Barcos.')
 
@@ -85,8 +88,14 @@ def registro1():
         Interfaz.deiconify()  # volver a la ventana principal
     regis.mainloop()
 
-def jugar(BarcosA,BarcosB,BarcosC,Nusuario):
-    Play(BarcosA,BarcosB,BarcosC,Nusuario)
+
+
+
+
+
+
+
+
 
 #Interfaz
 Interfaz=Tk()
@@ -142,5 +151,6 @@ Interfaz.mainloop()
 
 """
 Referencias:
+https://es.stackoverflow.com/questions/506801/c%C3%B3mo-convertir-en-windows-una-ventana-pygame-en-una-windowchild-de-otra-ventana
 http://programarcadegames.com/python_examples/show_file.php?lang=es&file=array_backed_grid.py
 """
