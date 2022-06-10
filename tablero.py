@@ -223,6 +223,7 @@ class TableroEnemigo:
 
         pygame.quit()
         
+        
 
 
 class TableroJugador:
