@@ -29,6 +29,7 @@ def cargarImagen(nombre):
     return imagen
 
 
+
 def Verifica(BarcosA, BarcosB, BarcosC, Nombre):
     
     if (BarcosA+(BarcosB*2)+(BarcosC*4))<=100 :

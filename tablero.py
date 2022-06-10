@@ -148,6 +148,7 @@ class TableroEnemigo:
                     Posicionate+=1
 
 
+
         self.pantalla.fill(Fondo)
 
         for fila in range(10):
