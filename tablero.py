@@ -1,8 +1,10 @@
 from tkinter import PhotoImage
+from tkinter import *
 from pygame import *
 import os, pygame, random
 import time
 import threading
+from tkinter import messagebox
 
 #Esta funcion es para cargar las diferentes imagenes
 def cargarImagen(nombre): 
@@ -65,6 +67,7 @@ class TableroEnemigo:
 
         self.Acierto= 0
         self.Fallos= 0
+        self.TotalIntentos=0
         self.BarcosA= BarcosA #5
         self.BarcosB= BarcosB #3
         self.BarcosC= BarcosC #2
@@ -76,9 +79,9 @@ class TableroEnemigo:
         matriz= []
 
 
-        for fila in range(10):
+        for fila in range(20):
             matriz.append([])
-            for columna in range(10):
+            for columna in range(20):
                 matriz[fila].append(3)
         
 
@@ -165,6 +168,11 @@ class TableroEnemigo:
 
                 pygame.display.flip()
 
+        def DespuesPartida():
+            if run==False:
+                print("ya termino")
+
+
         
         run= True
         reloj= pygame.time.Clock()
@@ -173,6 +181,7 @@ class TableroEnemigo:
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
                     run= False
+                    DespuesPartida()
         
                 elif evento.type == pygame.MOUSEBUTTONDOWN:
 
@@ -192,11 +201,12 @@ class TableroEnemigo:
                         
                         if Cordenada== 3:
                             matriz[fila][columna] = 4
-                            print("Fallo")
                             #Fail()
                             self.Fallos+=1
+                            self.TotalIntentos+=1
                             color= Fallo
                             pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
+                            messagebox.showinfo('Fallo', 'Disparo fallido')
 
                         elif Cordenada!= 4:
                             if Cordenada == 0:
@@ -209,8 +219,9 @@ class TableroEnemigo:
                             matriz[fila][columna] = 4
 
                             self.Acierto+=1
+                            self.TotalIntentos+=1
                             color= Acierto
-                            print("sexo")
+                            messagebox.showinfo('Acierto', 'Barco golpeado')
                             acierto()
                             pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
 
@@ -223,7 +234,7 @@ class TableroEnemigo:
 
         pygame.quit()
         
-        
+
 
 
 class TableroJugador:

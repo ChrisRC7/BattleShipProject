@@ -1,14 +1,10 @@
 """
 Interfaz Principal
 """
-
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 from tkinter import *
 from tkinter import messagebox
 from pygame import *
-import os, pygame, random, sys, win32gui
+import os, pygame, random, sys
 from tablero import *
 
 
@@ -35,7 +31,7 @@ def Verifica(BarcosA, BarcosB, BarcosC, Nombre):
     if (BarcosA+(BarcosB*2)+(BarcosC*4))<=100 :
         Hilos(BarcosA, BarcosB, BarcosC, Nombre)
     else: 
-        messagebox.showinfo('Saturacion', 'Baje la cantidad de Barcos.')
+        messagebox.showwarning('Saturacion', 'Baje la cantidad de Barcos.')
 
 pygame.mixer.init()
 
@@ -135,8 +131,7 @@ menubar.add_command(label="Abrir",command= Abrir)
 Interfaz.config(menu= menubar)#agrega al menu
 Jugar= Button(Interfaz, text= "Jugar", command=lambda: Verifica( int(BarcosA.get()), int(BarcosB.get()), int(BarcosC.get()), Nusuario.get()))
 Jugar.place(x= 50, y= 260)
-Jugar= Button(Interfaz, text= "Jugar", command=lambda: acierto())
-Jugar.place(x= 50, y= 290)
+
 
 
 
