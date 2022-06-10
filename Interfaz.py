@@ -98,7 +98,7 @@ Interfaz.geometry(size)
 Interfaz.resizable(width= False, height= False)
 canvas= Canvas(Interfaz, width= 960, height=540)
 Fondo=cargarImagen("fondo.png")
-canvas.create_image(-2, -2, image= fondo, anchor=NW)
+canvas.create_image(-2, -2, image= Fondo, anchor=NW)
 titulo = Label(Interfaz, text="Introduzca su usuario",font=("Arial", 10), bg="grey")  # texto
 titulo.place(x=50, y=20)
 Nusuario = Entry(Interfaz, width=30, font=("Arial", 10), bg="grey")  # crea una caja para en num, textvariable hace una conexión entre la entry y la variable nombre
