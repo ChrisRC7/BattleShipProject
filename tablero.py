@@ -1,3 +1,4 @@
+from re import T
 from tkinter import PhotoImage
 from tkinter import *
 from pygame import *
@@ -172,18 +173,21 @@ class TableroEnemigo:
             if run==False:
                 print("ya termino")
 
-
         
+
         run= True
         reloj= pygame.time.Clock()
         while run:
+            inicio=time.perf_counter()
          
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
                     run= False
                     DespuesPartida()
-        
+                    
+
                 elif evento.type == pygame.MOUSEBUTTONDOWN:
+                    
 
                     #if evento.key == pygame.K_a:
                         posicion = pygame.mouse.get_pos()
@@ -233,6 +237,10 @@ class TableroEnemigo:
             pygame.display.flip()
 
         pygame.quit()
+        final=time.perf_counter()
+        tiempo=final-inicio
+        round(tiempo,0)
+        print("tu tiempo fue de: "+str(tiempo))
         
 
 
