@@ -5,7 +5,6 @@ import threading
 from tkinter import messagebox
 from tkinter import *
 
-from pyparsing import col
 
 #Esta funcion es para cargar las diferentes imagenes
 def cargarImagen(nombre): 
@@ -624,12 +623,12 @@ class TableroEnemigo:
                     time.sleep(1)
                     timert()
 
-                def H_Arbol():
+                def H_timer():
                     h1 = threading.Thread(target=timert, args=())
                     h1.start()
                     
             
-                H_Arbol()
+                H_timer()
         tiempoSupremo()
 
         
@@ -696,6 +695,7 @@ class TableroEnemigo:
                                 color= Acierto
                                 pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
                                 messagebox.showinfo('Acierto', 'Barco golpeado')
+                                Estadisticas=["Usuario: ",Nombre,"\n"'tiempo: ', self.timerrr,"segundos","\n"'Aceiertos: ', self.Acierto,'\n''Fallos ',self.Fallos,"\n""Intentos: ",self.TotalIntentos]
                                 acierto()
                                 Ataque(True)
 
