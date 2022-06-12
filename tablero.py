@@ -467,22 +467,43 @@ class TableroEnemigo:
 
 
 
-        def DespuesPartida():
-            if run==False:
-                print("ya termino")
+
+        run2=True
+        self.timerrr=0
+        def tiempoSupremo():
+            if run2 == True:
+                def timert():
+                    self.timerrr+=1
+                    time.sleep(1)
+                    timert()
+
+                def H_Arbol():
+                    h1 = threading.Thread(target=timert, args=())
+                    h1.start()
+                    
+            
+                H_Arbol()
+        tiempoSupremo()
 
         
         tiempo= 0
         run= True
         reloj= pygame.time.Clock()
         while run:
+            def DespuesPartida():
+                if run==False:
+                    messagebox.showinfo('Estadisticas', Estadisticas)
+                    print(Estadisticas)
          
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
                     run= False
+                    run2=False
                     DespuesPartida()
-        
+                    
+
                 elif evento.type == pygame.MOUSEBUTTONDOWN:
+                    
 
                     #if evento.key == pygame.K_a:
                         posicion = pygame.mouse.get_pos()
@@ -530,7 +551,7 @@ class TableroEnemigo:
                                 acierto()
 
                 cursor1.update()
-                #boton1.update(self.pantalla, cursor1)
+           
 
 
                         
