@@ -174,20 +174,37 @@ class TableroEnemigo:
 
                 pygame.display.flip()
 
-        def DespuesPartida():
-            if run==False:
-                print("ya termino")
 
-        
+        run2=True
+        self.timerrr=0
+        def tiempoSupremo():
+            if run2 == True:
+                def timert():
+                    self.timerrr+=1
+                    time.sleep(1)
+                    timert()
+
+                def H_Arbol():
+                    h1 = threading.Thread(target=timert, args=())
+                    h1.start()
+                    
+            
+                H_Arbol()
+        tiempoSupremo()
+
 
         run= True
         reloj= pygame.time.Clock()
         while run:
-            inicio=time.perf_counter()
+            def DespuesPartida():
+                if run==False:
+                    messagebox.showinfo('Estadisticas', Estadisticas)
+                    print(Estadisticas)
          
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
                     run= False
+                    run2=False
                     DespuesPartida()
                     
 
@@ -237,6 +254,8 @@ class TableroEnemigo:
 
                 cursor1.update()
                 boton1.update(self.pantalla, cursor1)
+                Estadisticas=["Usuario: ",Nombre,"\n"'tiempo: ', self.timerrr,"segundos","\n"'Aceiertos: ', self.Acierto,'\n''Fallos ',self.Fallos,"\n""Intentos: ",self.TotalIntentos]
+                
 
 
                         
@@ -246,11 +265,8 @@ class TableroEnemigo:
             pygame.display.flip()
 
         pygame.quit()
-        final=time.perf_counter()
-        tiempo=final-inicio
-        round(tiempo,0)
-        print("tu tiempo fue de: "+str(tiempo))
-        
+
+
 
 class Cursor(pygame.Rect):
     def __init__(self):
