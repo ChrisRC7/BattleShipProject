@@ -1,10 +1,11 @@
-from tkinter import PhotoImage
-from tkinter import *
 from pygame import *
 import os, pygame, random
 import time
 import threading
 from tkinter import messagebox
+from tkinter import *
+
+from pyparsing import col
 
 #Esta funcion es para cargar las diferentes imagenes
 def cargarImagen(nombre): 
@@ -22,12 +23,12 @@ def cargarImagen(nombre):
     imagen = PhotoImage(file=ruta) #Se crea la imagen  
     return imagen
 
-def Hilos(BarcosA, BarcosB, BarcosC, Nombre):
-    t1= threading.Thread(target= Play, args=(BarcosA, BarcosB, BarcosC, Nombre))
+
+
+
+def T1(boton):
+    t1=threading.Thread(target= CambiaBoton, args= (boton,))
     t1.start()
-    #time.sleep(5)
-    #t2= threading.Thread(target= Jugador)
-    #t2.start()
 
 
 
@@ -60,9 +61,12 @@ class TableroEnemigo:
 
         #Colores
         Fondo= (0, 99, 230)
-        Casillas= (0, 14, 107)
+        CasillasE= (0, 14, 107)
         Acierto= (0, 71, 12)
         Fallo= (82, 20, 48)
+        PosicionarBarcos= (28,84,68)
+    
+
 
         self.Acierto= 0
         self.Fallos= 0
@@ -73,31 +77,34 @@ class TableroEnemigo:
 
         Aceptar= pygame.image.load('Adjuntos/aceptar.png')
         Aceptar2= pygame.image.load('Adjuntos/aceptar2.png')
-        boton1= Boton(Aceptar, Aceptar2, 1350, 0)
+        Vertical= pygame.image.load('Adjuntos/vertical.png')
+        Vertical2= pygame.image.load('Adjuntos/vertical2.png')
+        Horizontal= pygame.image.load('Adjuntos/horizontal.png')
+        Horizontal2= pygame.image.load('Adjuntos/horizontal2.png')
+        boton1= Boton(Aceptar, Aceptar2, 1350, 5)
+        botonv= Boton(Vertical, Vertical2, 1350, 70)
+        botonh= Boton(Horizontal, Horizontal2, 1350, 130)
         cursor1= Cursor()
+        
 
         
         Cuadro= 60 #Tamaño de los cuadros
         Margen= 5 #Distancia entre cuadros
 
-        matriz= []
-
+        matrizE= []
 
         for fila in range(20):
-            matriz.append([])
+            matrizE.append([])
             for columna in range(20):
-                matriz[fila].append(3)
-        
-
-
-        
+                matrizE[fila].append(3)
+    
         Posicionate = 0
 
         while Posicionate < self.BarcosA:
             x=random.randint(0,9)
             y=random.randint(0,9)
-            if matriz[y][x]!=0:
-                matriz[y][x]=0
+            if matrizE[y][x]!=0:
+                matrizE[y][x]=0
                 Posicionate+= 1
         Posicionate = 0
         
@@ -105,19 +112,19 @@ class TableroEnemigo:
             x=random.randint(0,8)
             y=random.randint(0,8)
             Posicion= random.choice(["Vertical", "Horinzontal"])
-            Cordenada1= matriz[y][x]
+            Cordenada1= matrizE[y][x]
             if Posicion == "Vertical":
-                Cordenada2= matriz[y+1][x]
+                Cordenada2= matrizE[y+1][x]
                 if Cordenada1!= 0 and Cordenada1 != 1 and Cordenada2 != 0 and Cordenada2 !=1:
-                    matriz[y][x]= 1
-                    matriz[y+1][x]= 1
+                    matrizE[y][x]= 1
+                    matrizE[y+1][x]= 1
                     Posicionate+=1
             else:
 
-                Cordenada2= matriz[y][x+1]
+                Cordenada2= matrizE[y][x+1]
                 if Cordenada1!= 0 and Cordenada1 != 1 and Cordenada2 != 0 and Cordenada2 !=1:
-                    matriz[y][x]= 1
-                    matriz[y][x+1]= 1
+                    matrizE[y][x]= 1
+                    matrizE[y][x+1]= 1
                     Posicionate+=1
 
         Posicionate= 0
@@ -126,59 +133,346 @@ class TableroEnemigo:
             x=random.randint(0,6)
             y=random.randint(0,6)
             Posicion= random.choice(["Vertical", "Horinzontal"])
-            Cordenada1= matriz[y][x]
+            Cordenada1= matrizE[y][x]
             if Posicion == "Vertical":
-                Cordenada2= matriz[y+1][x]
-                Cordenada3= matriz[y+2][x]
-                Cordenada4= matriz[y+3][x]
+                Cordenada2= matrizE[y+1][x]
+                Cordenada3= matrizE[y+2][x]
+                Cordenada4= matrizE[y+3][x]
                 if Cordenada1!= 0 and Cordenada1 != 1 and Cordenada1!= 2 and Cordenada2 != 0 and Cordenada2 !=1\
                     and Cordenada2 != 2 and Cordenada3 !=0 and Cordenada3 !=1 and Cordenada3 !=2 and Cordenada4 !=0 \
                     and Cordenada4 !=1 and Cordenada4 != 2:
-                    matriz[y][x]= 2
-                    matriz[y+1][x]= 2
-                    matriz[y+2][x]= 2
-                    matriz[y+3][x]= 2
+                    matrizE[y][x]= 2
+                    matrizE[y+1][x]= 2
+                    matrizE[y+2][x]= 2
+                    matrizE[y+3][x]= 2
                     Posicionate+=1
             else:
 
-                Cordenada2= matriz[y][x+1]
-                Cordenada3= matriz[y][x+2]
-                Cordenada4= matriz[y][x+3]
+                Cordenada2= matrizE[y][x+1]
+                Cordenada3= matrizE[y][x+2]
+                Cordenada4= matrizE[y][x+3]
 
                 if Cordenada1!= 0 and Cordenada1 != 1 and Cordenada1!= 2 and Cordenada2 != 0 and Cordenada2 !=1\
                     and Cordenada2 != 2 and Cordenada3 !=0 and Cordenada3 !=1 and Cordenada3 !=2 and Cordenada4 !=0 \
                     and Cordenada4 !=1 and Cordenada4 != 2:
-                    matriz[y][x]= 2
-                    matriz[y][x+1]= 2
-                    matriz[y][x+2]= 2
-                    matriz[y][x+3]= 2
+                    matrizE[y][x]= 2
+                    matrizE[y][x+1]= 2
+                    matrizE[y][x+2]= 2
+                    matrizE[y][x+3]= 2
                     Posicionate+=1
 
+        Posicionate= 0
 
 
         self.pantalla.fill(Fondo)
 
         for fila in range(10):
             for columna in range(10):
-                color= Casillas
+                color= CasillasE
                 pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
 
-                pygame.display.flip()
+
             
         for fila in range(10):
             for columna in range(10, 20):
-                color= Acierto
+                color= CasillasE
                 pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (columna+0.5) + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
               
 
-                pygame.display.flip()
+        pygame.display.flip()
+        
+
+
+        confirmar= False
+        PosX= -500
+        PosX2= -500
+        PosX3= -500
+        PosX4= -500
+        PosY= -500
+        PosY2= -500
+        PosY3= -500
+        PosY4= -500
+        Orientacion= 'H'
+
+
+        while Posicionate<BarcosA:
+
+            for evento in pygame.event.get():
+                if evento.type == pygame.QUIT:
+                    Posicionate=100
+                    pygame.quit()
+
+                elif evento.type == pygame.MOUSEBUTTONDOWN:
+                    posicion= pygame.mouse.get_pos()
+                    columna = (posicion[0]-687.5) // (Cuadro+Margen-0.5)
+                    fila= posicion[1] // (Cuadro+Margen)
+                    columna+=10
+                    print(posicion)
+                    print(fila)
+                    print(columna)
+
+                    if cursor1.colliderect(botonh.rect):
+                        Orientacion= 'H'
+                        T1(botonh)
+                        
+                    
+                    if cursor1.colliderect(botonv.rect):
+                        Orientacion= 'V'
+                        T1(botonv)
+
+
+                    if cursor1.colliderect(boton1.rect) and confirmar:
+
+                        color= CasillasE
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX+0.5) + Margen, (Margen+Cuadro)* PosY + Margen, Cuadro, Cuadro ])
+                        PosX= ((PosX%10)*65)+687.5
+                        PosY= ((PosY%10)*65)+7
+                        T1(boton1)
+                        Posicionate+=1
+                        confirmar= False
+                        Barco_Nombre= 'BarcosA' + Orientacion
+                        BarcoA= pygame.image.load('Adjuntos/'+Barco_Nombre+ '.png')
+                        self.pantalla.blit(BarcoA, [PosX, PosY])
+                        PosX= -500
+                        PosY= -500
+               
+                    if 20>columna>=10 and fila<10: 
+                     
+                        color= CasillasE
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX+0.5) + Margen, (Margen+Cuadro)* PosY + Margen, Cuadro, Cuadro ])
+                        PosX= columna
+                        PosY= fila
+                        print("Barco")
+                        confirmar= True
+                        color= PosicionarBarcos
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (columna+0.5) + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
+                        
+                        
+
+            cursor1.update()
+            boton1.update(self.pantalla)
+            botonh.update(self.pantalla)
+            botonv.update(self.pantalla)
+
+            pygame.display.flip()
+        Posicionate= 0
+
+        while Posicionate<BarcosB:
+
+            for evento in pygame.event.get():
+                if evento.type == pygame.QUIT:
+                    Posicionate=100
+                    pygame.quit()
+
+                elif evento.type == pygame.MOUSEBUTTONDOWN:
+                    posicion= pygame.mouse.get_pos()
+                    columna = (posicion[0]-687.5) // (Cuadro+Margen-0.5)
+                    fila= posicion[1] // (Cuadro+Margen)
+                    columna+=10
+                    print(posicion)
+                    print(fila)
+                    print(columna)
+
+                    if cursor1.colliderect(botonh.rect):
+                        T1(botonh)
+                        if Orientacion!= 'H':
+                            Orientacion= 'H'
+                            color= CasillasE
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                            color= PosicionarBarcos
+                            PosX2+=1
+                            PosY2= PosY
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                    
+                    if cursor1.colliderect(botonv.rect):
+                        T1(botonv)
+                        if Orientacion!= 'V':
+                            Orientacion= 'V'
+                            color= CasillasE
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                            color= PosicionarBarcos
+                            PosX2= PosX
+                            PosY2+= 1
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                        
+
+
+
+                    if cursor1.colliderect(boton1.rect) and confirmar:
+                        color= CasillasE
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX+0.5) + Margen, (Margen+Cuadro)* PosY + Margen, Cuadro, Cuadro ])
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                        PosX= ((PosX%10)*65)+687.5
+                        PosY= ((PosY%10)*65)+7
+                        Barco_Nombre= 'BarcosB' + Orientacion
+                        BarcoA= pygame.image.load('Adjuntos/'+Barco_Nombre+ '.png')
+                        self.pantalla.blit(BarcoA, [PosX, PosY])
+                        T1(boton1)
+                        Posicionate+=1
+                        confirmar= False
+                        PosX= -500
+                        PosX2= -500
+                        PosY= -500
+                        PosY2= -500
+               
+                    if 20>columna>=10 and fila<10: 
+                     
+                        color= CasillasE
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX+0.5) + Margen, (Margen+Cuadro)* PosY + Margen, Cuadro, Cuadro ])
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                        PosX= PosX2= columna
+                        PosY= PosY2= fila
+                        if Orientacion=='H':
+                            PosX2+=1
+                        else:
+                            PosY2+=1
+                            
+                        print("Barco")
+                        confirmar= True
+                        color= PosicionarBarcos
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (columna+0.5) + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+    
+                           
+                        
+                        
+
+            cursor1.update()
+            boton1.update(self.pantalla)
+            botonh.update(self.pantalla)
+            botonv.update(self.pantalla)
+
+            pygame.display.flip()
+        
+        Posicionate= 0
+
+        while Posicionate<BarcosC:
+
+            for evento in pygame.event.get():
+                if evento.type == pygame.QUIT:
+                    Posicionate=100
+                    pygame.quit()
+
+                elif evento.type == pygame.MOUSEBUTTONDOWN:
+                    posicion= pygame.mouse.get_pos()
+                    columna = (posicion[0]-687.5) // (Cuadro+Margen-0.5)
+                    fila= posicion[1] // (Cuadro+Margen)
+                    columna+=10
+                    print(posicion)
+                    print(fila)
+                    print(columna)
+
+                    if cursor1.colliderect(botonh.rect):
+                        T1(botonh)
+                        if Orientacion!= 'H':
+                            Orientacion= 'H'
+                            color= CasillasE
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX3+0.5) + Margen, (Margen+Cuadro)* PosY3 + Margen, Cuadro, Cuadro ])
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX4+0.5) + Margen, (Margen+Cuadro)* PosY4 + Margen, Cuadro, Cuadro ])
+                            color= PosicionarBarcos
+                            PosX2+=1
+                            PosX3+=2
+                            PosX4+=3
+                            PosY2= PosY3= PosY4= PosY
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX3+0.5) + Margen, (Margen+Cuadro)* PosY3 + Margen, Cuadro, Cuadro ])
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX4+0.5) + Margen, (Margen+Cuadro)* PosY4 + Margen, Cuadro, Cuadro ])
+                    
+                    if cursor1.colliderect(botonv.rect):
+                        T1(botonv)
+                        if Orientacion!= 'V':
+                            Orientacion= 'V'
+                            color= CasillasE
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX3+0.5) + Margen, (Margen+Cuadro)* PosY3 + Margen, Cuadro, Cuadro ])
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX4+0.5) + Margen, (Margen+Cuadro)* PosY4 + Margen, Cuadro, Cuadro ])
+                            color= PosicionarBarcos
+                            PosY2+= 1
+                            PosY3+= 2
+                            PosY4+= 3
+                            PosX2= PosX3= PosX4= PosX
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX3+0.5) + Margen, (Margen+Cuadro)* PosY3 + Margen, Cuadro, Cuadro ])
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX4+0.5) + Margen, (Margen+Cuadro)* PosY4 + Margen, Cuadro, Cuadro ])
+                        
+
+
+
+                    if cursor1.colliderect(boton1.rect) and confirmar:
+                        color= CasillasE
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX+0.5) + Margen, (Margen+Cuadro)* PosY + Margen, Cuadro, Cuadro ])
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX3+0.5) + Margen, (Margen+Cuadro)* PosY3 + Margen, Cuadro, Cuadro ])
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX4+0.5) + Margen, (Margen+Cuadro)* PosY4 + Margen, Cuadro, Cuadro ])
+                        PosX= ((PosX%10)*65)+687.5
+                        PosY= ((PosY%10)*65)+7
+                        Barco_Nombre= 'BarcosC' + Orientacion
+                        BarcoA= pygame.image.load('Adjuntos/'+Barco_Nombre+ '.png')
+                        self.pantalla.blit(BarcoA, [PosX, PosY])
+                        T1(boton1)
+                        Posicionate+=1
+                        confirmar= False
+                        PosX= -500
+                        PosX2= -500
+                        PosX3= -500
+                        PosX4= -500
+                        PosY= -500
+                        PosY2= -500
+                        PosY3= -500
+                        PosY4= -500
+                       
+               
+                    if 20>columna>=10 and fila<10: 
+                     
+                        color= CasillasE
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX+0.5) + Margen, (Margen+Cuadro)* PosY + Margen, Cuadro, Cuadro ])
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX3+0.5) + Margen, (Margen+Cuadro)* PosY3 + Margen, Cuadro, Cuadro ])
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX4+0.5) + Margen, (Margen+Cuadro)* PosY4 + Margen, Cuadro, Cuadro ])
+                        
+                        PosX= PosX2= PosX3= PosX4= columna
+                        PosY= PosY2= PosY3= PosY4= fila
+                        if Orientacion=='H':
+                            PosX2+=1
+                            PosX3+=2
+                            PosX4+=3
+                        else:
+                            PosY2+=1
+                            PosY3+=2
+                            PosY4+=3
+                            
+                        print("Barco")
+                        confirmar= True
+                        color= PosicionarBarcos
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (columna+0.5) + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX2+0.5) + Margen, (Margen+Cuadro)* PosY2 + Margen, Cuadro, Cuadro ])
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX3+0.5) + Margen, (Margen+Cuadro)* PosY3 + Margen, Cuadro, Cuadro ])
+                        pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (PosX4+0.5) + Margen, (Margen+Cuadro)* PosY4 + Margen, Cuadro, Cuadro ])
+    
+                           
+                        
+                        
+
+            cursor1.update()
+            boton1.update(self.pantalla)
+            botonh.update(self.pantalla)
+            botonv.update(self.pantalla)
+
+            pygame.display.flip()
+
+        pygame.draw.rect(self.pantalla, Fondo, [1337, 0, 1595, 655])
+
+
+
+
 
         def DespuesPartida():
             if run==False:
                 print("ya termino")
 
-
         
+        tiempo= 0
         run= True
         reloj= pygame.time.Clock()
         while run:
@@ -194,45 +488,49 @@ class TableroEnemigo:
                         posicion = pygame.mouse.get_pos()
                         print(posicion)
                         columna = posicion[0] // (Cuadro+Margen)
-                        fila= posicion[1] // (Cuadro+Margen)
-                        if columna>=10:
-                            columna=9
-                        if fila>=10:
-                            fila=9    
+                        fila= posicion[1] // (Cuadro+Margen) 
                         print(columna)
                         print(fila)
-                        Cordenada= matriz[fila][columna]
-                        print(Cordenada)
+                       
                         
-                        if Cordenada== 3:
-                            matriz[fila][columna] = 4
-                            #Fail()
-                            self.Fallos+=1
-                            self.TotalIntentos+=1
-                            color= Fallo
-                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
-                            messagebox.showinfo('Fallo', 'Disparo fallido')
-                            Fail()
+                        if cursor1.colliderect(boton1.rect):
+                            T1(boton1)
+                      
+                            
 
-                        elif Cordenada!= 4:
-                            if Cordenada == 0:
-                                print("Barco Tipo A")
-                            elif Cordenada == 1:
-                                print("Barco Tipo B")
-                            elif Cordenada == 2:
-                                print("Barco Tipo C")
 
-                            matriz[fila][columna] = 4
+                        if columna<10 and fila<10:
+                            Cordenada= matrizE[fila][columna]
+                            print(Cordenada)
+                            if Cordenada== 3:
+                                matrizE[fila][columna] = 4
+                                #Fail()
+                                self.Fallos+=1
+                                self.TotalIntentos+=1
+                                color= Fallo
+                                pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
+                                messagebox.showinfo('Fallo', 'Disparo fallido')
+                                Fail()
 
-                            self.Acierto+=1
-                            self.TotalIntentos+=1
-                            color= Acierto
-                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
-                            messagebox.showinfo('Acierto', 'Barco golpeado')
-                            acierto()
+                            elif Cordenada!= 4:
+                                if Cordenada == 0:
+                                    print("Barco Tipo A")
+                                elif Cordenada == 1:
+                                    print("Barco Tipo B")
+                                elif Cordenada == 2:
+                                    print("Barco Tipo C")
+
+                                matrizE[fila][columna] = 4
+
+                                self.Acierto+=1
+                                self.TotalIntentos+=1
+                                color= Acierto
+                                pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
+                                messagebox.showinfo('Acierto', 'Barco golpeado')
+                                acierto()
 
                 cursor1.update()
-                boton1.update(self.pantalla, cursor1)
+                #boton1.update(self.pantalla, cursor1)
 
 
                         
@@ -242,7 +540,6 @@ class TableroEnemigo:
             pygame.display.flip()
 
         pygame.quit()
-        
 
 class Cursor(pygame.Rect):
     def __init__(self):
@@ -259,12 +556,26 @@ class Boton(pygame.sprite.Sprite):
         self.rect= self.imagen_actual.get_rect()
         self.rect.left, self.rect.top= (x, y)
 
-    def update(self, pantalla, cursor):
-        if cursor.colliderect(self.rect):
-            self.imagen_actual= self.imagen2
-        else: self.imagen_actual= self.imagen1
-
+    def update(self, pantalla):
         pantalla.blit(self.imagen_actual, self)
+        
+
+    def Accion(self):
+        self.imagen_actual= self.imagen2
+       
+        
+    
+    def Volver(self):
+        self.imagen_actual= self.imagen1
+    
+
+def CambiaBoton(boton):
+    boton.Accion()
+    time.sleep(0.05)
+    boton.Volver()
 
 
-Hilos(1, 2 ,3, "dsfdg")
+
+Play(4,4,4, "jkdzfhg")
+       
+

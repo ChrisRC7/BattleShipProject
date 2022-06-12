@@ -147,6 +147,6 @@ Interfaz.mainloop()
 
 """
 Referencias:
-https://es.stackoverflow.com/questions/506801/c%C3%B3mo-convertir-en-windows-una-ventana-pygame-en-una-windowchild-de-otra-ventana
+https://www.youtube.com/watch?v=Zvrj1b9Mguk&list=PL46E99FE946C1C946&index=45&ab_channel=ChelinTutorials
 http://programarcadegames.com/python_examples/show_file.php?lang=es&file=array_backed_grid.py
 """
