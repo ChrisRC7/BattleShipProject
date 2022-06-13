@@ -22,16 +22,13 @@ def cargarImagen(nombre):
     imagen = PhotoImage(file=ruta) #Se crea la imagen  
     return imagen
 
-
+def Play(BarcosA, BarcosB, BarcosC, Nombre, Acierto, Fallos, matrizJ, matrizE, RestantesA, RestantesE):
+    TableroIA= Tablero(BarcosA, BarcosB, BarcosC, Nombre, Acierto, Fallos, matrizJ, matrizE, RestantesA, RestantesE)
 
 
 def T1(boton):
     t1=threading.Thread(target= CambiaBoton, args= (boton,))
     t1.start()
-
-
-
-
 
 def Fail():
     pygame.mixer.init() # Inicializar todos los módulos Pygame importados
@@ -45,15 +42,12 @@ def acierto():
     pygame.mixer.music.play(1)  # reproduce la cancion
     pygame.mixer.music.set_volume(0.5)  # el volumen de la musica
 
-def Play(BarcosA, BarcosB, BarcosC, Nombre):
-    TableroIA= TableroEnemigo(BarcosA, BarcosB, BarcosC, Nombre)
 
 
-
-class TableroEnemigo: 
+class Tablero: 
 
     
-    def __init__(self, BarcosA, BarcosB, BarcosC, Nombre):
+    def __init__(self, BarcosA, BarcosB, BarcosC, Nombre, Aciertos, Fallos, matrizJ, matrizE, RestantesA, RestantesE):
         pygame.init()
         self.pantalla= pygame.display.set_mode([1595, 655]) #1340, 655
         pygame.display.set_caption("Guerra Naval")
@@ -66,13 +60,15 @@ class TableroEnemigo:
         PosicionarBarcos= (28,84,68)
     
 
-
-        self.Acierto= 0
-        self.Fallos= 0
-        self.TotalIntentos=0
+    
+        self.Aciertos= Acierto
+        self.Fallos= Fallos
         self.BarcosA= BarcosA #5
         self.BarcosB= BarcosB #3
         self.BarcosC= BarcosC #2
+        
+        self.RestantesA= RestantesA
+        self.RestantesE= RestantesE
 
         Aceptar= pygame.image.load('Adjuntos/aceptar.png')
         Aceptar2= pygame.image.load('Adjuntos/aceptar2.png')
@@ -80,9 +76,12 @@ class TableroEnemigo:
         Vertical2= pygame.image.load('Adjuntos/vertical2.png')
         Horizontal= pygame.image.load('Adjuntos/horizontal.png')
         Horizontal2= pygame.image.load('Adjuntos/horizontal2.png')
-        boton1= Boton(Aceptar, Aceptar2, 1350, 5)
-        botonv= Boton(Vertical, Vertical2, 1350, 70)
-        botonh= Boton(Horizontal, Horizontal2, 1350, 130)
+        guardar= pygame.image.load('Adjuntos/guardar.png')
+        guardar2= pygame.image.load('Adjuntos/guardar2.png')
+        boton1= Boton(Aceptar, Aceptar2, 1350, 35)
+        botonv= Boton(Vertical, Vertical2, 1350, 100)
+        botonh= Boton(Horizontal, Horizontal2, 1350, 160)
+        BotonGuardar= Boton(guardar, guardar2, 1350, 590 )
         cursor1= Cursor()
         
 
@@ -90,8 +89,13 @@ class TableroEnemigo:
         Cuadro= 60 #Tamaño de los cuadros
         Margen= 5 #Distancia entre cuadros
 
-        matrizJ= []
-        matrizE= []
+        Fuente= pygame.font.Font(None, 30)
+        Nombre_Texto= Fuente.render(Nombre, 0, (0,0,0))
+
+        def Guardar_Partida():
+            archivo=open(Nombre+'.txt','w')
+            archivo.write(str(self.BarcosA) + '/' + str(self.BarcosB) + '/' + str(self.BarcosB) + '/' + str(self.BarcosC) + '/' + '/' + Nombre + '/' + str(self.Aciertos) + '/' + str(self.Fallos) + '/' + str(matrizJ) + '/' + str(matrizE) + '/' + str(self.RestantesA) + '/' + str(self.RestantesE))
+            archivo.close
 
         for fila in range(10):
             matrizE.append([])
@@ -143,7 +147,7 @@ class TableroEnemigo:
                 if Cordenada1!= 0 and Cordenada1 != 1 and Cordenada1!= 2 and Cordenada2 != 0 and Cordenada2 !=1\
                     and Cordenada2 != 2 and Cordenada3 !=0 and Cordenada3 !=1 and Cordenada3 !=2 and Cordenada4 !=0 \
                     and Cordenada4 !=1 and Cordenada4 != 2:
-                    matrizE[y][x]= 2
+                    matrizE[y][x]= 2cd 
                     matrizE[y+1][x]= 2
                     matrizE[y+2][x]= 2
                     matrizE[y+3][x]= 2
@@ -180,7 +184,7 @@ class TableroEnemigo:
                 color= CasillasE
                 pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (columna+0.5) + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
               
-
+        self.pantalla.blit(Nombre_Texto,(1350, 5))
         pygame.display.flip()
         
 
@@ -212,6 +216,10 @@ class TableroEnemigo:
                     print(posicion)
                     print(fila)
                     print(columna)
+
+                    if cursor1.colliderect(BotonGuardar.rect):
+                        T1(BotonGuardar)
+                        Guardar_Partida()
 
                     if cursor1.colliderect(botonh.rect):
                         Orientacion= 'H'
@@ -262,6 +270,7 @@ class TableroEnemigo:
             boton1.update(self.pantalla)
             botonh.update(self.pantalla)
             botonv.update(self.pantalla)
+            BotonGuardar.update(self.pantalla)
 
             pygame.display.flip()
         Posicionate= 0
@@ -278,6 +287,10 @@ class TableroEnemigo:
                     columna = int((posicion[0]-687.5) // (Cuadro+Margen-0.5))
                     fila= posicion[1] // (Cuadro+Margen)
                     columna+=10
+
+                    if cursor1.colliderect(BotonGuardar.rect):
+                        T1(BotonGuardar)
+                        Guardar_Partida()
                     
                     if cursor1.colliderect(botonh.rect) and confirmar:
                         T1(botonh)
@@ -403,6 +416,7 @@ class TableroEnemigo:
             boton1.update(self.pantalla)
             botonh.update(self.pantalla)
             botonv.update(self.pantalla)
+            BotonGuardar.update(self.pantalla)
 
             pygame.display.flip()
         
@@ -423,6 +437,10 @@ class TableroEnemigo:
                     print(posicion)
                     print(fila)
                     print(columna)
+
+                    if cursor1.colliderect(BotonGuardar.rect):
+                        T1(BotonGuardar)
+                        Guardar_Partida()
 
                     if cursor1.colliderect(botonh.rect) and confirmar:
                         T1(botonh)
@@ -587,124 +605,132 @@ class TableroEnemigo:
             boton1.update(self.pantalla)
             botonh.update(self.pantalla)
             botonv.update(self.pantalla)
+            BotonGuardar.update(self.pantalla)
 
             pygame.display.flip()
 
         pygame.draw.rect(self.pantalla, Fondo, [1337, 0, 1595, 655])
-
-        def Ataque(Turno):
-            while Turno:
+        self.pantalla.blit(Nombre_Texto,(1350, 5))
+        self.Turno= False
+        def Ataque():
+            while self.Turno:
                 x=random.randint(0,9)
                 y=random.randint(0,9)
                 if matrizJ[y][x]!=4:
-                    Turno= False
                     columna= x+10
                     fila= y
                     if matrizJ[y][x]==3:
+                        matrizJ[y][x]= 4
                         time.sleep(1)
                         Fail()
                         print('La ia fallo')
                         color= Fallo
                         pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (columna+0.5) + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
+                        time.sleep(1)
+                        self.Turno= False
                     else:
+                        matrizJ[y][x]= 4
                         time.sleep(1)
                         acierto()
                         print('La ia acerto')
                         color= Acierto
                         pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (columna+0.5) + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
-
-
-        run2=True
-        self.timerrr=0
-        def tiempoSupremo():
-            if run2 == True:
-                def timert():
-                    self.timerrr+=1
-                    time.sleep(1)
-                    timert()
-
-                def H_timer():
-                    h1 = threading.Thread(target=timert, args=())
-                    h1.start()
-                    
-            
-                H_timer()
-        tiempoSupremo()
-
+                        pygame.display.flip()
+                        self.RestantesA-= 1
+                        time.sleep(1)
         
-        tiempo= 0
+        self.timerrr=0
         run= True
+        def tiempoSupremo():
+            while run == True:
+                Tiempo= Fuente.render(str(self.timerrr) + ' segundos', 0, (0,0,0))
+                pygame.draw.rect(self.pantalla, Fondo, [1350, 50, 1500, 80])
+                self.pantalla.blit(Tiempo, (1350,50))
+                self.timerrr+=1
+                time.sleep(1)
+
+        def T2():
+            t2 = threading.Thread(target=tiempoSupremo)
+            t2.start()      
+        T2()
+        Ganar= False
+        Estado= 'Inconcluso'
         reloj= pygame.time.Clock()
         while run:
-            def DespuesPartida():
-                if run==False:
-                    messagebox.showinfo('Estadisticas', Estadisticas)
-                    print(Estadisticas)
-         
+            if self.RestantesE== 0:
+                Ganar= True
+                Estado= 'de Victoria'
+                run= False
+            elif self.RestantesA== 0:
+                Estado= 'de Derrota'
+                run= False
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
                     run= False
-                    run2=False
-                    DespuesPartida()
+                elif evento.type == pygame.MOUSEBUTTONDOWN and self.Turno==False:
                     
+                    posicion = pygame.mouse.get_pos()
+                    print(posicion)
+                    columna = posicion[0] // (Cuadro+Margen)
+                    fila= posicion[1] // (Cuadro+Margen) 
+                    print(columna)
+                    print(fila)
 
-                elif evento.type == pygame.MOUSEBUTTONDOWN:
-                    
-
-                    #if evento.key == pygame.K_a:
-                        posicion = pygame.mouse.get_pos()
-                        print(posicion)
-                        columna = posicion[0] // (Cuadro+Margen)
-                        fila= posicion[1] // (Cuadro+Margen) 
-                        print(columna)
-                        print(fila)
+                    if cursor1.colliderect(BotonGuardar.rect):
+                        T1(BotonGuardar)
+                        Guardar_Partida()
                        
                         
-                        if cursor1.colliderect(boton1.rect):
-                            T1(boton1)
+                    if cursor1.colliderect(boton1.rect):
+                        T1(boton1)
                       
                             
 
 
-                        if columna<10 and fila<10:
-                            Cordenada= matrizE[fila][columna]
-                            print(Cordenada)
-                            if Cordenada== 3:
-                                matrizE[fila][columna] = 4
-                                #Fail()
-                                self.Fallos+=1
-                                self.TotalIntentos+=1
-                                color= Fallo
-                                pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
-                                messagebox.showinfo('Fallo', 'Disparo fallido')
-                                Fail()
-                                Ataque(True)
+                    if columna<10 and fila<10:
+                        Cordenada= matrizE[fila][columna]
+                        print(Cordenada)
+                        if Cordenada== 3:
+                            matrizE[fila][columna] = 4
+                            self.Fallos+=1
+                            color= Fallo
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
+                            Fail()
+                            messagebox.showinfo('Fallo', 'Disparo fallido')
+                            self.Turno= True
+                            pygame.display.flip()
+                            Ataque()
 
-                            elif Cordenada!= 4:
-                                if Cordenada == 0:
-                                    print("Barco Tipo A")
-                                elif Cordenada == 1:
-                                    print("Barco Tipo B")
-                                elif Cordenada == 2:
-                                    print("Barco Tipo C")
+                        elif Cordenada!= 4:
+                            if Cordenada == 0:
+                                print("Barco Tipo A")
+                            elif Cordenada == 1:
+                                print("Barco Tipo B")
+                            elif Cordenada == 2:
+                                print("Barco Tipo C")
 
-                                matrizE[fila][columna] = 4
+                            matrizE[fila][columna] = 4
 
-                                self.Acierto+=1
-                                self.TotalIntentos+=1
-                                color= Acierto
-                                pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
-                                messagebox.showinfo('Acierto', 'Barco golpeado')
-                                Estadisticas=["Usuario: ",Nombre,"\n"'tiempo: ', self.timerrr,"segundos","\n"'Aceiertos: ', self.Acierto,'\n''Fallos ',self.Fallos,"\n""Intentos: ",self.TotalIntentos]
-                                acierto()
-                                Ataque(True)
+                            self.Aciertos+=1
+                            self.RestantesE-= 1 
+                            color= Acierto
+                            pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* columna + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
+                            acierto()
+                            messagebox.showinfo('Acierto', 'Barco golpeado')
+                                
+                            
 
                 cursor1.update()
+                BotonGuardar.update(self.pantalla)
 
             reloj.tick(60)
 
             pygame.display.flip()
 
+
+        Estadisticas=('Usuario: '+ Nombre + '\nTiempo: ' + str(self.timerrr) + ' segundos' + '\nAceiertos: ' + str(self.Aciertos) +'\nFallos: ' + str(self.Fallos) + '\nIntentos: ' + str(self.Aciertos+self.Fallos))
+        messagebox.showinfo('Estadisticas' + Estado, Estadisticas)
+        print(Estadisticas)
         pygame.quit()
 
 class Cursor(pygame.Rect):
@@ -742,6 +768,11 @@ def CambiaBoton(boton):
 
 
 
-Play(4,4,4, "jkdzfhg")
+a= 4
+b= 4
+c= 4
+
+Totales= a + b*2 + c*4
+Play(a, b, c, "GatitosSupremos", 0, 0, [], [], Totales, Totales)
        
 

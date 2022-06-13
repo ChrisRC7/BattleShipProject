@@ -29,7 +29,7 @@ def cargarImagen(nombre):
 def Verifica(BarcosA, BarcosB, BarcosC, Nombre):
     
     if (BarcosA+(BarcosB*2)+(BarcosC*4))<=100 :
-        Hilos(BarcosA, BarcosB, BarcosC, Nombre)
+        Play(BarcosA, BarcosB, BarcosC, Nombre)
     else: 
         messagebox.showwarning('Saturacion', 'Baje la cantidad de Barcos.')
 
