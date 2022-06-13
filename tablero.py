@@ -31,12 +31,30 @@ def T1(boton):
     t1.start()
 
 def Fail():
+    """
+    Esta función se encarga de reproducir el audio de Fallo
+    Parametros:
+    ninguno
+    La funcion inicializar todos los módulos Pygame importados, pone la cancion, reproduce la cancion y controla el volumen
+
+    return
+    Retorna el sonido de Fallo
+    """
     pygame.mixer.init() # Inicializar todos los módulos Pygame importados
     pygame.mixer.music.load("Adjuntos/fallo.wav")  # pone la cancion
     pygame.mixer.music.play(1)  # reproduce la cancion
     pygame.mixer.music.set_volume(0.5)  # el volumen de la musica
 
 def acierto():
+    """
+    Esta función se encarga de reproducir el audio de explocion
+    Parametros:
+    ninguno
+    La funcion inicializar todos los módulos Pygame importados, pone la cancion, reproduce la cancion y controla el volumen
+
+    return
+    Retorna el sonido de explocion
+    """
     pygame.mixer.init()# Inicializar todos los módulos Pygame importados
     pygame.mixer.music.load("Adjuntos/explosion.wav")  # pone la cancion
     pygame.mixer.music.play(1)  # reproduce la cancion
@@ -105,7 +123,15 @@ class Tablero:
                 matrizJ[fila].append(3)
 
         Posicionate = 0
+        """
+        Esta función se encarga de colocar barco tipo a en una posicion aleatoria 
+        Parametros:
+        ninguno
+        La funcion agarra un numero random para la x,y y coloca un barco en la posicion de la matriz donde esten la x,y escogidas y verifica que no haya un otro barco en esa posicion
 
+        return
+        Retorna un barco tipo a en una posicion aleatoria 
+        """
         while Posicionate < self.BarcosA:
             x=random.randint(0,9)
             y=random.randint(0,9)
@@ -113,7 +139,16 @@ class Tablero:
                 matrizE[y][x]=0
                 Posicionate+= 1
         Posicionate = 0
-        
+        """
+        Esta función se encarga de colocar barco tipo b en una posicion aleatoria 
+        Parametros:
+        ninguno
+        La funcion agarra un numero random para la x,y y escoge de forma random si es vertical o horizontal, coloca un barco en la posicion de la matriz donde esten la x,y escogidas y verifica que no haya un otro barco en esa posicion
+        si es vertical, a cordenada2 le suma un 1 a la y, y si es horizontal a cordenada2 le suma un 1 a la x
+
+        return
+        Retorna un barco tipo b en una posicion aleatoria 
+        """
         while Posicionate < self.BarcosB:
             x=random.randint(0,8)
             y=random.randint(0,8)
@@ -134,7 +169,16 @@ class Tablero:
                     Posicionate+=1
 
         Posicionate= 0
-        
+        """
+        Esta función se encarga de colocar barco tipo c en una posicion aleatoria 
+        Parametros:
+        ninguno
+        La funcion agarra un numero random para la x,y y escoge de forma random si es vertical o horizontal, coloca un barco en la posicion de la matriz donde esten la x,y escogidas y verifica que no haya un otro barco en esa posicion
+        si es vertical, a cordenada2 le suma un 1 a la y,  a cordenada3 le suma un 2 a la y,  a cordenada4 le suma un 3 a la y,y si es horizontal, a cordenada2 le suma un 1 a la x, a cordenada3 le suma un 2 a la x,  a cordenada4 le suma un 3 a la x
+
+        return
+        Retorna un barco tipo c en una posicion aleatoria 
+        """
         while Posicionate < self.BarcosC:
             x=random.randint(0,6)
             y=random.randint(0,6)
@@ -613,6 +657,16 @@ class Tablero:
         self.pantalla.blit(Nombre_Texto,(1350, 5))
         self.Turno= False
         def Ataque():
+            """
+            Esta función se encarga de que el barco enemigo ataque
+            Parametros:
+            ninguno
+            La funcion seleciona una x,y de forma random donde no haya atacado anteriormente,si la matrizJ[y][x]==3 la convierte en un 4 , reproduce la funcion Fail y hace un cuadrado en la posicion selecionada,
+            de caso contrario  convierte la matrizJ[y][x] en 4, redroduce la funcion acierto y hace un cuadrado en la posicion selecionada
+
+            return
+            Si la ia falla, retorna un cuadrado en la posicion selecionada de color Fallo (rojo), Si la ia acierta, retorna un cuadrado en la posicion selecionada de color acierto (verde)
+            """
             while self.Turno:
                 x=random.randint(0,9)
                 y=random.randint(0,9)
@@ -642,6 +696,15 @@ class Tablero:
         self.timerrr=0
         run= True
         def tiempoSupremo():
+            """
+            Esta función se encarga de mostrar el timepo
+            Parametros:
+            ninguno
+            La funcion crea un espacio donde se muestra una variable que se le va sumando 1 cada segundo
+
+            return
+            Retorna el timepo en partida  
+            """
             while run == True:
                 Tiempo= Fuente.render(str(self.timerrr) + ' segundos', 0, (0,0,0))
                 pygame.draw.rect(self.pantalla, Fondo, [1350, 50, 1500, 80])
@@ -686,7 +749,16 @@ class Tablero:
                       
                             
 
+                    """
+                    Esta función se encarga de que el jugador pueda atacar
+                    Parametros:
+                    ninguno
+                    La funcion verifica si golpeo un barco, si no golpeo ningun barco, marca la zona como lugar atacado luego suma 1 a los ataques fallidos, crea un cuadrado en la zona del disparo para marcar que ya ataco ahi y llama la funcion Fail, nos muestra un mensaje que nos indica que fallamos,turno pasa a ser True, se llama a la funcion ataque,
+                    si golpea algun barco, marca de que tipo es, suma 1 a aciertos resta uno a restantes, crea un cuadrado en la zona del disparo para marcar que ya ataco ahi y llama la funcion acierto,os muestra un mensaje que nos indica que acertamos
 
+                    return
+                    Retorna el disparo del jugador en la posicion deseada
+                    """
                     if columna<10 and fila<10:
                         Cordenada= matrizE[fila][columna]
                         print(Cordenada)
