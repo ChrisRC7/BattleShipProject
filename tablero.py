@@ -61,7 +61,7 @@ class Tablero:
     
 
     
-        self.Aciertos= Acierto
+        self.Aciertos= Aciertos
         self.Fallos= Fallos
         self.BarcosA= BarcosA #5
         self.BarcosB= BarcosB #3
@@ -94,7 +94,7 @@ class Tablero:
 
         def Guardar_Partida():
             archivo=open(Nombre+'.txt','w')
-            archivo.write(str(self.BarcosA) + '/' + str(self.BarcosB) + '/' + str(self.BarcosB) + '/' + str(self.BarcosC) + '/' + '/' + Nombre + '/' + str(self.Aciertos) + '/' + str(self.Fallos) + '/' + str(matrizJ) + '/' + str(matrizE) + '/' + str(self.RestantesA) + '/' + str(self.RestantesE))
+            archivo.write(str(self.BarcosA) + '/' + str(self.BarcosB) + '/' + str(self.BarcosB) + '/' + str(self.BarcosC) + '/' + Nombre + '/' + str(self.Aciertos) + '/' + str(self.Fallos) + '/' + str(matrizJ) + '/' + str(matrizE) + '/' + str(self.RestantesA) + '/' + str(self.RestantesE))
             archivo.close
 
         for fila in range(10):
@@ -147,7 +147,7 @@ class Tablero:
                 if Cordenada1!= 0 and Cordenada1 != 1 and Cordenada1!= 2 and Cordenada2 != 0 and Cordenada2 !=1\
                     and Cordenada2 != 2 and Cordenada3 !=0 and Cordenada3 !=1 and Cordenada3 !=2 and Cordenada4 !=0 \
                     and Cordenada4 !=1 and Cordenada4 != 2:
-                    matrizE[y][x]= 2cd 
+                    matrizE[y][x]= 2
                     matrizE[y+1][x]= 2
                     matrizE[y+2][x]= 2
                     matrizE[y+3][x]= 2
