@@ -33,6 +33,26 @@ def Verifica(BarcosA, BarcosB, BarcosC, Nombre):
     else: 
         messagebox.showwarning('Saturacion', 'Baje la cantidad de Barcos.')
 
+def Cargar(Nombre):
+    partida= (Nombre + '.txt')
+    for archivo in os.listdir():
+        if archivo == (partida):
+            archivo=open(partida)
+            Contenido=archivo.readlines()
+            archivo.close()
+            Datos= Contenido[0].split('/')
+            BarcosA= Datos[0]
+            BarcosB= Datos[1]
+            BarcosC= Datos[2]
+            Jugador_Nombre= Datos[3]
+            Aciertos= Datos[4]
+            Fallos= Datos[5]
+            MatrizJ= Datos[6]
+            MatrizE= Datos[7]
+            RestantesA= Datos[8]
+            RestantesE= Datos[9]
+            Tiempo= Datos[10]
+
 pygame.mixer.init()
 
 def Fail():
