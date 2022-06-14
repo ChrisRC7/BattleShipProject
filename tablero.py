@@ -99,7 +99,8 @@ class Tablero:
         self.Margen= 5 #Distancia entre cuadros
 
         self.Fuente= pygame.font.Font(None, 30)
-        self.Nombre_Texto= self.Fuente.render(Nombre, 0, (0,0,0))
+        self.Nombre_Texto= self.Fuente.render(self.Nombre, 0, (0,0,0))
+        
 
     def Guardar_Partida(self):
         """
@@ -285,7 +286,7 @@ class Tablero:
         PosY4= -500
         Orientacion= 'H'
 
-
+        self.pantalla.blit(self.Nombre_Texto, (1350,10))
         while self.ColocadosA<self.BarcosA:
 
             for evento in pygame.event.get():
@@ -793,11 +794,10 @@ class Tablero:
                     time.sleep(1)
                     self.Turno= False
                 else:
+                    self.T3(fila, columna)
                     self.matrizJ2[y][x]= 4
                     acierto()
                     color= self.Acierto
-                    pygame.draw.rect(self.pantalla, color, [(self.Margen+self.Cuadro)* (columna+0.5) + self.Margen, (self.Margen+self.Cuadro)* fila + self.Margen, self.Cuadro, self.Cuadro ])
-                    pygame.display.flip()
                     self.RestantesA-= 1
                     time.sleep(1)
         
@@ -821,24 +821,45 @@ class Tablero:
     def T1(self):
         t1 = threading.Thread(target=self.tiempoSupremo)
         t1.start()      
-        
-    def Animacion(self, fila, columna):
+
+    def Animacion1(self, fila, columna):
         for imagen in range(60):
-            PosX= ((columna)*65)+10
-            PosY= ((fila)*65)+7
+            PosY= fila*65 +7
+            PosX= (columna)*65 +10
             Nombre= 'Adjuntos/explosion'+str(imagen)+'.png'
             Explosion= pygame.image.load(Nombre)
             self.pantalla.blit(Explosion, [PosX, PosY])
             pygame.display.flip()
-            time.sleep(0.02)
-            
+            time.sleep(0.02)  
+
         color= self.Acierto
-        pygame.draw.rect(self.pantalla, color, [(self.Margen+self.Cuadro)* columna + self.Margen, (self.Margen+self.Cuadro)* fila + self.Margen, self.Cuadro, self.Cuadro ])
+        pygame.draw.rect(self.pantalla, color, [(self.Margen+self.Cuadro)* columna + self.Margen, (self.Margen+self.Cuadro)* fila + self.Margen, self.Cuadro, self.Cuadro ]) 
+
+    def Animacion2(self, fila, columna):
+        for imagen in range(60):
+            PosX= (columna-10)*65 +687.5
+            PosY= fila*65 +7
+            Nombre= 'Adjuntos/explosion'+str(imagen)+'.png'
+            Explosion= pygame.image.load(Nombre)
+            self.pantalla.blit(Explosion, [PosX, PosY])
+            pygame.display.flip()
+            time.sleep(0.02)  
+
+        color= self.Acierto
+        pygame.draw.rect(self.pantalla, color, [(self.Margen+self.Cuadro)* (columna+0.5) + self.Margen, (self.Margen+self.Cuadro)* fila + self.Margen, self.Cuadro, self.Cuadro ])
+
 
     def T2(self, fila, columna):
-        print('Se llamo al hilo')
-        t2= threading.Thread(target=self.Animacion, args=(fila, columna))
+        t2= threading.Thread(target=self.Animacion1, args=(fila, columna))
         t2.start()
+    
+    def T3(self, fila, columna):
+        t3= threading.Thread(target=self.Animacion2, args=(fila, columna))
+        t3.start()
+    
+    def T4(self):
+        t4= threading.Thread(target= self.Ataque())
+        t4.start()
 
 
     def Battalla(self):
@@ -854,6 +875,7 @@ class Tablero:
         """
         self.Turno= False
         pygame.draw.rect(self.pantalla, self.Fondo, [1350, 0, 1595, 800])
+        self.pantalla.blit(self.Nombre_Texto, (1350,10))
         self.T1()
         Estado= 'Inconcluso'
         reloj= pygame.time.Clock()
@@ -872,7 +894,6 @@ class Tablero:
                 elif evento.type == pygame.MOUSEBUTTONDOWN and self.Turno==False:
                     
                     posicion = pygame.mouse.get_pos()
-                    print(posicion)
                     columna = posicion[0] // (self.Cuadro+self.Margen)
                     fila= posicion[1] // (self.Cuadro+self.Margen) 
         
@@ -893,7 +914,7 @@ class Tablero:
                             messagebox.showinfo('Fallo', 'Disparo fallido')
                             self.Turno= True
                             pygame.display.flip()
-                            self.Ataque()
+                            self.T4()
 
                         elif Cordenada!= 4:
                             self.matrizE[fila][columna] = 4
@@ -920,7 +941,7 @@ class Tablero:
 
 
     def Accion(self):
-        if self.ColocadosA<self.BarcosA or self.ColocadosV<self.BarcosB or self.ColocadosC<self.BarcosC:
+        if self.ColocadosA<self.BarcosA or self.ColocadosB<self.BarcosB or self.ColocadosC<self.BarcosC:
             self.PartidaNoEmpezada()
             self.CrearTablas()
             self.ColocarBarcos()

@@ -40,7 +40,7 @@ def Verifica(BarcosA, BarcosB, BarcosC, Nombre):
             Contenido= LeerArchivo()
             Posicion=VerificaPosicion(Contenido,1, Puntos)
 
-            if Posicion<8:
+            if Posicion<11:
                 Borrar=open("Puntos.txt","w")
                 Borrar.close()
                 NuevaTabla(Posicion,1,Contenido, Puntos, Nombre)
@@ -62,7 +62,7 @@ def VerificaPosicion(Contenido,Contador, Puntos):
         return VerificaPosicion(Contenido[1:], Contador, Puntos)
 
 def NuevaTabla(Posicion,Contador,Tabla, Puntos, Nombre):
-    if Contador!=8:
+    if Contador!=11:
         if Posicion==Contador:
             Escribir(str(Contador) + ")" + "," + Nombre + "," + str(Puntos))
             Contador+=1
@@ -93,7 +93,7 @@ def Tabla():
     Tabla.title("Salón de la fama")#Se le indica el titulo a la ventana
     Tabla.resizable(width=NO,height=NO)#Se restringe el tamaño
     Puntajes= Transformar(LeerArchivo(),[])
-    TablaAux(0,0,8,2,Puntajes, Tabla)
+    TablaAux(0,0,11,2,Puntajes, Tabla)
     Tabla.mainloop()
 
 def Transformar(Tabla,Resultado):
@@ -200,8 +200,8 @@ def ayuda():
     Titulo1.place(x=10, y= 10)
     Guia= Label(Acerca, text= 'Primero hay que introducir el nombre de usuario y la cantidad de barcos qué quiere de cada tipo, luego colocar\nlos barcos de cada tipo en las posiciones que usted guste, para esto simplemente haga click en la casilla donde\ndesea colocar sus barcos y darle al botón de check sí ahí es donde desea colocar el barco, si desea mover su barco\nde forma  vertical u horizontal haga click en cualquiera de los botones que usted necesite para ello, después dará\n inicio a la partida,haga click donde desee atacar en el tablero enemigo, se le mostrar la información de si acertó o falló,\nen caso de haber acertado puede volver a atacar, en caso contrario espere a que el enemigo ataque, una vez usted o\nel enemigo hayan logrado derribar todos los barcos contrarios, se acabará el juego mostrándole las estadísticas de\nla partida. Si desea puede guardar la partida dándole al botón guardar y en el menú puede volver a cargar la partida\njustamente donde la dejó.', font=('Arial', 11))
     Guia.place(x= 10, y=30)
-    Titulo2= Label(Acerca, text= 'Desarrolladores', font=('Arial', 11))
-    Titulo2.place(x=10, y=50)
+    Titulo2= Label(Acerca, text= 'Desarrolladores: ', font=('Arial', 11))
+    Titulo2.place(x=10, y=180)
     Desarrolladores= Label(Acerca, text= 'Estudiantes de ingeniería en computadores en el instituto tecnológico de Costa Rica con el profesor\nJason Leiton Jiménez en el curso de taller de programación GR 5, versión 1.0\nJavier Mora Masis y Christopher Rodríguez', font=('Arial',11))
     Desarrolladores.place(x=10, y=200)
 
