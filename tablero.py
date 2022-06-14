@@ -314,8 +314,10 @@ class Tablero:
 
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
-                    Posicionate=100
-                    pygame.quit()
+                    self.ColocadosA=500
+                    self.ColocadosB=500
+                    self.ColocadosC=500
+                    
 
                 elif evento.type == pygame.MOUSEBUTTONDOWN:
                     posicion= pygame.mouse.get_pos()
@@ -381,8 +383,10 @@ class Tablero:
 
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
-                    Posicionate=100
-                    pygame.quit()
+                    self.ColocadosA=500
+                    self.ColocadosB=500
+                    self.ColocadosC=500
+                   
 
                 elif evento.type == pygame.MOUSEBUTTONDOWN:
                     posicion= pygame.mouse.get_pos()
@@ -513,14 +517,18 @@ class Tablero:
             self.BotonGuardar.update(self.pantalla)
 
             pygame.display.flip()
+
+        
         
 
         while self.ColocadosC<self.BarcosC:
 
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
-                    Posicionate=100
-                    pygame.quit()
+                    self.ColocadosA=500
+                    self.ColocadosB=500
+                    self.ColocadosC=500
+                   
 
                 elif evento.type == pygame.MOUSEBUTTONDOWN:
                     posicion= pygame.mouse.get_pos()
@@ -763,7 +771,7 @@ class Tablero:
                         self.pantalla.blit(BarcoC, [PosX, PosY])
                     
                     elif Valor==2 and fila<=6:
-                        
+
                         if self.matrizJ[fila+1][columna]==2 and self.matrizJ[fila+2][columna]==2 and self.matrizJ[fila+2][columna]==2:
                             self.matrizJ[fila+1][columna]= 7
                             self.matrizJ[fila+2][columna]= 7
@@ -1020,11 +1028,14 @@ class Tablero:
 
 
     def Accion(self):
-        if self.ColocadosA<self.BarcosA or self.ColocadosB<self.BarcosB or self.ColocadosC<self.BarcosC:
-            self.PartidaNoEmpezada()
-            self.CrearTablas()
-            self.ColocarBarcos()
-            self.Battalla()
+        if self.ColocadosA<self.BarcosA or self.ColocadosB<self.BarcosB or self.ColocadosC<self.BarcosC: 
+                self.PartidaNoEmpezada()
+                self.CrearTablas()
+                self.ColocarBarcos()
+                if self.BarcosC==self.ColocadosC:
+                    self.Battalla()
+                else:
+                    pygame.quit()
             
         else:
             self.Recrear()
