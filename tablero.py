@@ -244,22 +244,20 @@ class Tablero:
                     self.pantalla.blit(BarcoA, [PosX, PosY])
 
                 elif Valor==1 and columna<=8:
-                    if self.matrizJ[fila][columna+1]==1:
+                    if self.matrizJ[fila][columna+1] == 1:
                         self.matrizJ[fila][columna+1]=6
                         PosX= ((columna%10)*65)+687.5
                         PosY= ((fila%10)*65)+7
                         BarcoB= pygame.image.load('Adjuntos/BarcosBH.png')
-                
                         self.pantalla.blit(BarcoB, [PosX, PosY])
 
-                elif Valor==1 and fila<=8:
-                    if self.matrizJ[fila+1][columna]==1:
-                        self.matrizJ[fila+1][columna]= 6
-                        PosX= ((columna%10)*65)+687.5
-                        PosY= ((fila%10)*65)+7
-                        BarcoB= pygame.image.load('Adjuntos/BarcosBV.png')
-        
-                        self.pantalla.blit(BarcoB, [PosX, PosY])
+                    elif Valor==1 and fila<=8:
+                        if self.matrizJ[fila+1][columna]==1:
+                            self.matrizJ[fila+1][columna]= 6
+                            PosX= ((columna%10)*65)+687.5
+                            PosY= ((fila%10)*65)+7
+                            BarcoB= pygame.image.load('Adjuntos/BarcosBV.png')
+                            self.pantalla.blit(BarcoB, [PosX, PosY])
 
                 elif Valor==2 and columna<=6:
                     if self.matrizJ[fila][columna+1]==2 and self.matrizJ[fila][columna+2]==2 and self.matrizJ[fila][columna+3]==2:
@@ -271,16 +269,15 @@ class Tablero:
                         BarcoC= pygame.image.load('Adjuntos/BarcosCH.png')
                         self.pantalla.blit(BarcoC, [PosX, PosY])
                     
-                elif Valor==2 and fila<=6:
-                    if self.matrizJ[fila+1][columna]==2 and self.matrizJ[fila+2][columna]==2 and self.matrizJ[fila+2][columna]==2:
-                        self.matrizJ[fila+1][columna]= 7
-                        self.matrizJ[fila+2][columna]= 7
-                        self.matrizJ[fila+3][columna]= 7
-                        PosX= ((columna%10)*65)+687.5
-                        PosY= ((fila%10)*65)+7
-                        BarcoC= pygame.image.load('Adjuntos/BarcosCV.png')
-                      
-                        self.pantalla.blit(BarcoC, [PosX, PosY])
+                    elif Valor==2 and fila<=6:
+                        if self.matrizJ[fila+1][columna]==2 and self.matrizJ[fila+2][columna]==2 and self.matrizJ[fila+2][columna]==2:
+                            self.matrizJ[fila+1][columna]= 7
+                            self.matrizJ[fila+2][columna]= 7
+                            self.matrizJ[fila+3][columna]= 7
+                            PosX= ((columna%10)*65)+687.5
+                            PosY= ((fila%10)*65)+7
+                            BarcoC= pygame.image.load('Adjuntos/BarcosCV.png')
+                            self.pantalla.blit(BarcoC, [PosX, PosY])
             
             for fila in range(10):
                 for columna in range(10):
@@ -289,6 +286,8 @@ class Tablero:
                         self.matrizJ[fila][columna]= 1
                     elif valor==7:
                         self.matrizJ[fila][columna]=2
+                        
+            pygame.display.flip()
 
     def ColocarBarcos(self):
         """
@@ -735,22 +734,25 @@ class Tablero:
                     self.pantalla.blit(BarcoA, [PosX, PosY])
 
                 elif Valor==1 and columna<=8:
-                    if self.matrizJ[fila][columna+1]==1:
+
+                    if self.matrizJ[fila][columna+1] == 1:
                         self.matrizJ[fila][columna+1]=6
                         PosX= ((columna%10)*65)+687.5
                         PosY= ((fila%10)*65)+7
                         BarcoB= pygame.image.load('Adjuntos/BarcosBH.png')
                         self.pantalla.blit(BarcoB, [PosX, PosY])
 
-                elif Valor==1 and fila<=8:
-                    if self.matrizJ[fila+1][columna]==1:
-                        self.matrizJ[fila+1][columna]= 6
-                        PosX= ((columna%10)*65)+687.5
-                        PosY= ((fila%10)*65)+7
-                        BarcoB= pygame.image.load('Adjuntos/BarcosBV.png')
-                        self.pantalla.blit(BarcoB, [PosX, PosY])
+                    elif Valor==1 and fila<=8:
+
+                        if self.matrizJ[fila+1][columna]==1:
+                            self.matrizJ[fila+1][columna]= 6
+                            PosX= ((columna%10)*65)+687.5
+                            PosY= ((fila%10)*65)+7
+                            BarcoB= pygame.image.load('Adjuntos/BarcosBV.png')
+                            self.pantalla.blit(BarcoB, [PosX, PosY])
 
                 elif Valor==2 and columna<=6:
+
                     if self.matrizJ[fila][columna+1]==2 and self.matrizJ[fila][columna+2]==2 and self.matrizJ[fila][columna+3]==2:
                         self.matrizJ[fila][columna+1]= 7
                         self.matrizJ[fila][columna+2]= 7
@@ -759,17 +761,17 @@ class Tablero:
                         PosY= ((fila%10)*65)+7
                         BarcoC= pygame.image.load('Adjuntos/BarcosCH.png')
                         self.pantalla.blit(BarcoC, [PosX, PosY])
-
-
-                elif Valor==2 and fila<=6:
-                    if self.matrizJ[fila+1][columna]==2 and self.matrizJ[fila+2][columna]==2 and self.matrizJ[fila+2][columna]==2:
-                        self.matrizJ[fila+1][columna]= 7
-                        self.matrizJ[fila+2][columna]= 7
-                        self.matrizJ[fila+3][columna]= 7
-                        PosX= ((columna%10)*65)+687.5
-                        PosY= ((fila%10)*65)+7
-                        BarcoC= pygame.image.load('Adjuntos/BarcosCV.png')
-                        self.pantalla.blit(BarcoC, [PosX, PosY])
+                    
+                    elif Valor==2 and fila<=6:
+                        
+                        if self.matrizJ[fila+1][columna]==2 and self.matrizJ[fila+2][columna]==2 and self.matrizJ[fila+2][columna]==2:
+                            self.matrizJ[fila+1][columna]= 7
+                            self.matrizJ[fila+2][columna]= 7
+                            self.matrizJ[fila+3][columna]= 7
+                            PosX= ((columna%10)*65)+687.5
+                            PosY= ((fila%10)*65)+7
+                            BarcoC= pygame.image.load('Adjuntos/BarcosCV.png')
+                            self.pantalla.blit(BarcoC, [PosX, PosY])
             
         for fila in range(10):
             for columna in range(10):
