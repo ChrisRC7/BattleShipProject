@@ -1,10 +1,12 @@
 """
 Interfaz Principal
+Este es el codigo del proyecto del juego de Christopher Rodriguez y Javier Mora
+para ayuda use el comado de Documentacion()
 """
 from tkinter import *
 from tkinter import messagebox
 from pygame import *
-import os, pygame, random, sys
+import os, pygame
 from tablero import *
 
 
@@ -31,6 +33,7 @@ def Verifica(BarcosA, BarcosB, BarcosC, Nombre):
     if suma <=100 :
         Interfaz.withdraw()
         tablero= Tablero(BarcosA, BarcosB, BarcosC, 0, 0, 0, Nombre, 0, 0, [], [], [], suma, suma, 0)
+        tablero.Accion()
         Interfaz.deiconify()
         Puntos= tablero.Get_Puntos()
         if Puntos!=0:
@@ -135,6 +138,7 @@ def Cargar(Nombre):
             Contenido=archivo.readlines()
             archivo.close()
             Datos= Contenido[0].split('/')
+
             BarcosA= int(Datos[0])
             BarcosB= int(Datos[1])
             BarcosC= int(Datos[2])
@@ -150,21 +154,27 @@ def Cargar(Nombre):
             RestantesA= int(Datos[12])
             RestantesE= int(Datos[13])
             Tiempo= int(Datos[14])
-    Interfaz.withdraw()
-    tablero= Tablero(BarcosA, BarcosB, BarcosC, ColocadosA, ColocadosB, ColocadosC, Jugador_Nombre, Aciertos, Fallos, matrizJ, matrizJ2, matrizE, RestantesA, RestantesE, Tiempo)
-    Interfaz.deiconify()
-    Puntos= tablero.Get_Puntos()
+            Interfaz.withdraw()
+            tablero= Tablero(BarcosA, BarcosB, BarcosC, ColocadosA, ColocadosB, ColocadosC, Jugador_Nombre, Aciertos, Fallos, matrizJ, matrizJ2, matrizE, RestantesA, RestantesE, Tiempo)
+            tablero.Accion()
+            Interfaz.deiconify()
+            Puntos= tablero.Get_Puntos()
 
-    if Puntos!=0:
-        Contenido= LeerArchivo()
-        Posicion=VerificaPosicion(Contenido,1, Puntos)
+            if Puntos!=0:
+                Contenido= LeerArchivo()
+                Posicion=VerificaPosicion(Contenido,1, Puntos)
 
-        if Posicion<8:
-            Borrar=open("Puntos.txt","w")
-            Borrar.close()
-            NuevaTabla(Posicion,1,Contenido, Puntos, Nombre)
-            messagebox.showinfo('Felicidades', 'Has entrado en el salón de la fama:')
-            Tabla()
+                if Posicion<8:
+                    Borrar=open("Puntos.txt","w")
+                    Borrar.close()
+                    NuevaTabla(Posicion,1,Contenido, Puntos, Nombre)
+                    messagebox.showinfo('Felicidades', 'Has entrado en el salón de la fama:')
+                    Tabla()
+            
+    else:
+        messagebox.showwarning('Error al buscar la partida', 'La partida se guarda con su nombre de usuario.')
+
+    
 
 pygame.mixer.init()
 
@@ -204,7 +214,18 @@ def Salón_de_la_fama():
     canvas2.place(x=0, y=0)
     
 
-
+def Documentacion():
+    tablero= Tablero(0, 0, 0, 0, 0, 0, "Docu", 0, 0, [], [], [], 0, 0, 0)
+    help(Fail)
+    help(acierto)
+    help(tablero.Guardar_Partida)
+    help(tablero.PartidaNoEmpezada)
+    help(tablero.CrearTablas)
+    help(tablero.ColocarBarcos)
+    help(tablero.Recrear)
+    help(tablero.Ataque)
+    help(tablero.tiempoSupremo)
+    help(tablero.Battalla)
 
 #Interfaz
 Interfaz=Tk()
@@ -248,18 +269,10 @@ Jugar= Button(Interfaz, text= "Jugar", command=lambda: Verifica( int(BarcosA.get
 Jugar.place(x= 50, y= 260)
 Boton_Cargar= Button(Interfaz, text="Cargar", command= lambda: Cargar(Cargar_Partida.get()))
 Boton_Cargar.place(x=350, y= 80)
-
-
-
-
 Opcioes=Menu(Interfaz)
-#Opcioes.add_command(label= "Salon de la Fama", command= Fama)
-#Opcioes.add_command(label= "Ayuda", command= ayuda)
-#Opcioes.add_command(label= "Acerca de", command= Info)
-
 canvas.grid()
-
 Interfaz.mainloop()
+
 
 
 """
