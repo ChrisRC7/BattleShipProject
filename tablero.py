@@ -1,32 +1,9 @@
-from queue import PriorityQueue
 from pygame import *
 import os, pygame, random
 import time
 import threading
 from tkinter import messagebox
 from tkinter import *
-
-from pyparsing import col
-
-
-#Esta funcion es para cargar las diferentes imagenes
-def cargarImagen(nombre): 
-    """
-    Esta función se encarga de cargar la imagenes
-    Parametros:
-    nombre: Es un string con el nombre de la imagen que se desea cargar
-
-    La funcion toma el nombre de la imagen y la buscas dentro de la carpeta Adjuntos
-
-    return
-    Retorna la imagen
-    """
-    ruta = os.path.join('Adjuntos/',nombre) #Se le indica el lugar donde buscar la imagen y el nombre de la imagen
-    imagen = PhotoImage(file=ruta) #Se crea la imagen  
-    return imagen
-
-def Play(BarcosA, BarcosB, BarcosC, ColocadosA, ColocadosB, ColocadosC, Nombre, Aciertos, Fallos, matrizJ, matrizJ2, matrizE, RestantesA, RestantesE, Tiempo):
-    TableroIA= Tablero( BarcosA, BarcosB, BarcosC, ColocadosA, ColocadosB, ColocadosC, Nombre, Aciertos, Fallos, matrizJ, matrizJ2, matrizE, RestantesA, RestantesE, Tiempo)
 
 
 def T1(boton):
@@ -241,6 +218,59 @@ class Tablero:
                     pygame.draw.rect(self.pantalla, color, [(Margen+Cuadro)* (columna+0.5) + Margen, (Margen+Cuadro)* fila + Margen, Cuadro, Cuadro ])
 
             pygame.display.flip()
+
+            for fila in range(10):
+                for columna in range(10):
+                    Valor= self.matrizJ[fila][columna]
+                    if Valor==0:
+                        PosX= ((columna%10)*65)+687.5
+                        PosY= ((fila%10)*65)+7
+                        BarcoA= pygame.image.load('Adjuntos/BarcosAH.png')
+                        print('Se coloco BarcoA')
+                        self.pantalla.blit(BarcoA, [PosX, PosY])
+
+                    elif Valor==1 and columna<=8:
+                        if self.matrizJ[fila][columna+1]==1:
+                            self.matrizJ[fila][columna+1]=6
+                            PosX= ((columna%10)*65)+687.5
+                            PosY= ((fila%10)*65)+7
+                            BarcoB= pygame.image.load('Adjuntos/BarcosBH.png')
+                            print('Se coloco BarcoBH')
+                            self.pantalla.blit(BarcoB, [PosX, PosY])
+
+                    elif Valor==1 and fila<=8:
+                        if self.matrizJ[fila+1][columna]==1:
+                            self.matrizJ[fila+1][columna]= 6
+                            PosX= ((columna%10)*65)+687.5
+                            PosY= ((fila%10)*65)+7
+                            BarcoB= pygame.image.load('Adjuntos/BarcosBV.png')
+                            print('Se coloco BarcoBV')
+                            self.pantalla.blit(BarcoB, [PosX, PosY])
+
+                    elif Valor==2 and columna<=6:
+                        if self.matrizJ[fila][columna+1]==2 and self.matrizJ[fila][columna+2]==2 and self.matrizJ[fila][columna+3]==2:
+                            self.matrizJ[fila][columna+1]= 7
+                            self.matrizJ[fila][columna+2]= 7
+                            self.matrizJ[fila][columna+3]= 7
+                            PosX= ((columna%10)*65)+687.5
+                            PosY= ((fila%10)*65)+7
+                            BarcoC= pygame.image.load('Adjuntos/BarcosCH.png')
+                            self.pantalla.blit(BarcoC, [PosX, PosY])
+                            print('Se coloco BarcoCH')
+
+                    elif Valor==2 and fila<=6:
+                        if self.matrizJ[fila+1][columna]==2 and self.matrizJ[fila+2][columna]==2 and self.matrizJ[fila+2][columna]==2:
+                            self.matrizJ[fila+1][columna]= 7
+                            self.matrizJ[fila+2][columna]= 7
+                            self.matrizJ[fila+3][columna]= 7
+                            PosX= ((columna%10)*65)+687.5
+                            PosY= ((fila%10)*65)+7
+                            BarcoC= pygame.image.load('Adjuntos/BarcosCV.png')
+                            print('Se coloco BarcoCV')
+                            self.pantalla.blit(BarcoC, [PosX, PosY])
+
+
+
 
             confirmar= False
             PosX= -500
@@ -667,6 +697,7 @@ class Tablero:
 
                 pygame.display.flip()
         else:
+            
             self.pantalla.fill(Fondo)
             for fila in range(10):
                 for columna in range(10):
@@ -819,12 +850,12 @@ class Tablero:
             t2 = threading.Thread(target=tiempoSupremo)
             t2.start()      
         T2()
-        Ganar= False
+        self.Ganar= False
         Estado= 'Inconcluso'
         reloj= pygame.time.Clock()
         while run:
             if self.RestantesE== 0:
-                Ganar= True
+                self.Ganar= True
                 Estado= 'de Victoria'
                 run= False
             elif self.RestantesA== 0:
@@ -839,18 +870,10 @@ class Tablero:
                     print(posicion)
                     columna = posicion[0] // (Cuadro+Margen)
                     fila= posicion[1] // (Cuadro+Margen) 
-                    print(columna)
-                    print(fila)
-
+        
                     if cursor1.colliderect(BotonGuardar.rect):
                         T1(BotonGuardar)
-                        Guardar_Partida()
-                       
-                        
-                    if cursor1.colliderect(boton1.rect):
-                        T1(boton1)
-                      
-                            
+                        Guardar_Partida()      
 
                     """
                     Esta función se encarga de que el jugador pueda atacar
@@ -877,13 +900,6 @@ class Tablero:
                             Ataque()
 
                         elif Cordenada!= 4:
-                            if Cordenada == 0:
-                                print("Barco Tipo A")
-                            elif Cordenada == 1:
-                                print("Barco Tipo B")
-                            elif Cordenada == 2:
-                                print("Barco Tipo C")
-
                             self.matrizE[fila][columna] = 4
 
                             self.Aciertos+=1
@@ -907,6 +923,17 @@ class Tablero:
         messagebox.showinfo('Estadisticas ' + Estado, Estadisticas)
         print(Estadisticas)
         pygame.quit()
+
+    def Get_Puntos(self):
+        if self.Ganar==True:
+            return int(round(100+ 10000%self.timerrr,0))
+        else:
+            return 0
+
+
+
+    
+    
 
 class Cursor(pygame.Rect):
     def __init__(self):

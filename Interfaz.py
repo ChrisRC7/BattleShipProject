@@ -29,11 +29,91 @@ def cargarImagen(nombre):
 def Verifica(BarcosA, BarcosB, BarcosC, Nombre):
     suma= (BarcosA+(BarcosB*2)+(BarcosC*4))
     if suma <=100 :
-        Play(BarcosA, BarcosB, BarcosC, 0, 0, 0, Nombre, 0, 0, [], [], [], suma, suma, 0)
+        Interfaz.withdraw()
+        tablero= Tablero(BarcosA, BarcosB, BarcosC, 0, 0, 0, Nombre, 0, 0, [], [], [], suma, suma, 0)
+        Interfaz.deiconify()
+        Puntos= tablero.Get_Puntos()
+        if Puntos!=0:
+            Contenido= LeerArchivo()
+            Posicion=VerificaPosicion(Contenido,1, Puntos)
+
+            if Posicion<8:
+                Borrar=open("Puntos.txt","w")
+                Borrar.close()
+                NuevaTabla(Posicion,1,Contenido, Puntos, Nombre)
+                messagebox.showinfo('Felicidades', 'Has entrado en el salón de la fama:')
+                Tabla()
+
     else: 
         messagebox.showwarning('Saturacion', 'Baje la cantidad de Barcos.')
 
-def Transformar(Matriz):
+def VerificaPosicion(Contenido,Contador, Puntos):
+    if Contenido==[]:
+        return Contador
+    
+    elif int(Contenido[0].split(",")[2].split("\n")[0])<Puntos:
+        return Contador
+
+    else:
+        Contador+=1
+        return VerificaPosicion(Contenido[1:], Contador, Puntos)
+
+def NuevaTabla(Posicion,Contador,Tabla, Puntos, Nombre):
+    if Contador!=8:
+        if Posicion==Contador:
+            Escribir(str(Contador) + ")" + "," + Nombre + "," + str(Puntos))
+            Contador+=1
+            return NuevaTabla(Posicion,Contador,Tabla, Puntos, Nombre)
+        else:
+            Usuario=Tabla[0].split(",")[1]
+            Puntaje=Tabla[0].split(",")[2].split("\n")[0]
+            Escribir(str(Contador) + ")" + "," + Usuario + "," + Puntaje)
+            Contador+=1
+            return NuevaTabla(Posicion, Contador, Tabla[1:], Puntos, Nombre)
+
+        
+
+def Escribir(dato):
+    archivo=open("Puntos.txt","a")
+    archivo.write(dato+"\n")
+    archivo.close
+
+def LeerArchivo():
+    archivo=open("Puntos.txt")
+    Contenido=archivo.readlines()
+    archivo.close()
+    return Contenido
+
+#Funcion para la tabla
+def Tabla():
+    Tabla=Toplevel(bg="Blue")#Se define la ventana
+    Tabla.title("Salón de la fama")#Se le indica el titulo a la ventana
+    Tabla.resizable(width=NO,height=NO)#Se restringe el tamaño
+    Puntajes= Transformar(LeerArchivo(),[])
+    TablaAux(0,0,8,2,Puntajes, Tabla)
+    Tabla.mainloop()
+
+def Transformar(Tabla,Resultado):
+    if Tabla==[]:
+        return [["Jugadores", "Puntaje"]] + Resultado
+    else:
+        Resultado= Resultado + [[Tabla[0].split(",")[0] + " " + Tabla[0].split(",")[1], Tabla[0].split(",")[2].split("\n")[0]]]
+        return Transformar(Tabla[1:],Resultado)
+
+def TablaAux(fila, columna, filamax, columnamax, Puntajes, Tabla):
+    if fila<filamax:
+        Celda=Entry(Tabla,width=20,fg="black",bg="sky blue",font=("Arial",15,"bold"))
+        Celda.grid(row=fila, column= columna)
+        Celda.insert(END, Puntajes[fila][columna])
+        columna+=1
+        if columna<columnamax:
+            TablaAux(fila, columna, filamax, columnamax, Puntajes, Tabla)
+        else:
+            fila+=1
+            columna=0
+            TablaAux(fila, columna, filamax, columnamax, Puntajes, Tabla)
+
+def TransformarMatriz(Matriz):
     NuevaMatriz=[]
     Provicional=[]
 
@@ -64,13 +144,27 @@ def Cargar(Nombre):
             Jugador_Nombre= Datos[6]
             Aciertos= int(Datos[7])
             Fallos= int(Datos[8])
-            matrizJ= Transformar(Datos[9])
-            matrizJ2= Transformar(Datos[10])
-            matrizE= Transformar(Datos[11])
+            matrizJ= TransformarMatriz(Datos[9])
+            matrizJ2= TransformarMatriz(Datos[10])
+            matrizE= TransformarMatriz(Datos[11])
             RestantesA= int(Datos[12])
             RestantesE= int(Datos[13])
             Tiempo= int(Datos[14])
-    Play(BarcosA, BarcosB, BarcosC, ColocadosA, ColocadosB, ColocadosC, Jugador_Nombre, Aciertos, Fallos, matrizJ, matrizJ2, matrizE, RestantesA, RestantesE, Tiempo)
+    Interfaz.withdraw()
+    tablero= Tablero(BarcosA, BarcosB, BarcosC, ColocadosA, ColocadosB, ColocadosC, Jugador_Nombre, Aciertos, Fallos, matrizJ, matrizJ2, matrizE, RestantesA, RestantesE, Tiempo)
+    Interfaz.deiconify()
+    Puntos= tablero.Get_Puntos()
+
+    if Puntos!=0:
+        Contenido= LeerArchivo()
+        Posicion=VerificaPosicion(Contenido,1, Puntos)
+
+        if Posicion<8:
+            Borrar=open("Puntos.txt","w")
+            Borrar.close()
+            NuevaTabla(Posicion,1,Contenido, Puntos, Nombre)
+            messagebox.showinfo('Felicidades', 'Has entrado en el salón de la fama:')
+            Tabla()
 
 pygame.mixer.init()
 
@@ -88,48 +182,27 @@ def acierto():
 
 
 def ayuda():
-    Acer=Toplevel(Interfaz)
-    Acer.title("Ayuda")
-    Acer.minsize(800,533)
-    Acer.resizable(width=NO, height=NO)
-    canvas2 = Canvas(Acer, width=800, height=533)
-    canvas2.place(x=0, y=0)
+    Acerca=Toplevel()
+    Acerca.title("Ayuda")
+    Acerca.minsize(800,533)
+    Acerca.resizable(width=NO, height=NO)
+    Titulo1= Label(Acerca, text= 'Guia para poder jugar:', font=('Arial', 11))
+    Titulo1.place(x=10, y= 10)
+    Guia= Label(Acerca, text= 'Primero hay que introducir el nombre de usuario y la cantidad de barcos qué quiere de cada tipo, luego colocar\nlos barcos de cada tipo en las posiciones que usted guste, para esto simplemente haga click en la casilla donde\ndesea colocar sus barcos y darle al botón de check sí ahí es donde desea colocar el barco, si desea mover su barco\nde forma  vertical u horizontal haga click en cualquiera de los botones que usted necesite para ello, después dará\n inicio a la partida,haga click donde desee atacar en el tablero enemigo, se le mostrar la información de si acertó o falló,\nen caso de haber acertado puede volver a atacar, en caso contrario espere a que el enemigo ataque, una vez usted o\nel enemigo hayan logrado derribar todos los barcos contrarios, se acabará el juego mostrándole las estadísticas de\nla partida. Si desea puede guardar la partida dándole al botón guardar y en el menú puede volver a cargar la partida\njustamente donde la dejó.', font=('Arial', 11))
+    Guia.place(x= 10, y=30)
+    Titulo2= Label(Acerca, text= 'Desarrolladores', font=('Arial', 11))
+    Titulo2.place(x=10, y=50)
+    Desarrolladores= Label(Acerca, text= 'Estudiantes de ingeniería en computadores en el instituto tecnológico de Costa Rica con el profesor\nJason Leiton Jiménez en el curso de taller de programación GR 5, versión 1.0\nJavier Mora Masis y Christopher Rodríguez', font=('Arial',11))
+    Desarrolladores.place(x=10, y=200)
 
 def Salón_de_la_fama():
-    salon=Toplevel(Interfaz)
+    salon=Toplevel()
     salon.title("Salón de la fama")
     salon.minsize(800,533)
     salon.resizable(width=NO, height=NO)
     canvas2 = Canvas(salon, width=800, height=533)
     canvas2.place(x=0, y=0)
     
-def Abrir():
-    abrir=Toplevel(Interfaz)
-    abrir.title("Abrir")
-    abrir.minsize(800,533)
-    abrir.resizable(width=NO, height=NO)
-    canvas2 = Canvas(abrir, width=800, height=533)
-    canvas2.place(x=0, y=0)
-
-def registro1():
-    regis=Toplevel(Interfaz)
-    regis.title("Registro")
-    regis.minsize(500,350)
-    regis.resizable(width=NO,height=NO)
-    vprincipal = Button(regis, text="volver ", height=2, width=20, fg="black", command=lambda: regresarRegis())
-    vprincipal.place(x=300, y=280)
-  
-    def regresarRegis():
-        regis.withdraw()  # destruir la ventana regis
-        Interfaz.deiconify()  # volver a la ventana principal
-    regis.mainloop()
-
-
-
-
-
-
-
 
 
 
@@ -169,8 +242,7 @@ Cargar_Partida.place(x= 350, y= 50)
 ######################################################################
 menubar=Menu(Interfaz)#agrega menu
 menubar.add_command(label="ayuda", command= ayuda)#opcion
-menubar.add_command(label="Salón de la fama",command= Salón_de_la_fama)
-menubar.add_command(label="Abrir",command= Abrir)
+menubar.add_command(label="Salón de la fama",command= lambda: Tabla())
 Interfaz.config(menu= menubar)#agrega al menu
 Jugar= Button(Interfaz, text= "Jugar", command=lambda: Verifica( int(BarcosA.get()), int(BarcosB.get()), int(BarcosC.get()), Nusuario.get()))
 Jugar.place(x= 50, y= 260)
