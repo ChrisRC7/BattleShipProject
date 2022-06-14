@@ -1,3 +1,4 @@
+from multiprocessing.connection import wait
 from pygame import *
 import os, pygame, random
 import time
@@ -20,10 +21,13 @@ def Fail():
     return
     Retorna el sonido de Fallo
     """
-    pygame.mixer.init() # Inicializar todos los módulos Pygame importados
     pygame.mixer.music.load("Adjuntos/fallo.wav")  # pone la cancion
     pygame.mixer.music.play(1)  # reproduce la cancion
     pygame.mixer.music.set_volume(0.5)  # el volumen de la musica
+    time.sleep(1)
+    pygame.mixer.music.load("Adjuntos/musicafondo.wav")
+    pygame.mixer.music.play(loops=-1) 
+    pygame.mixer.music.set_volume(0.5)
 
 def acierto():
     """
@@ -35,11 +39,21 @@ def acierto():
     return
     Retorna el sonido de explocion
     """
-    pygame.mixer.init()# Inicializar todos los módulos Pygame importados
     pygame.mixer.music.load("Adjuntos/explosion.wav")  # pone la cancion
     pygame.mixer.music.play(1)  # reproduce la cancion
     pygame.mixer.music.set_volume(0.5)  # el volumen de la musica
+    time.sleep(1)
+    pygame.mixer.music.load("Adjuntos/musicafondo.wav")
+    pygame.mixer.music.play(loops=-1) 
+    pygame.mixer.music.set_volume(0.5)
 
+def AciertoMusic():
+    aciertar= threading.Thread(target=(acierto))
+    aciertar.start()
+
+def FalloMusic():
+    aciertar= threading.Thread(target=(Fail))
+    aciertar.start()
 
 
 class Tablero: 
@@ -59,7 +73,6 @@ class Tablero:
         self.PosicionarBarcos= (28,84,68)
         self.timerrr= Tiempo
         self.Nombre= Nombre
-    
         self.Aciertos= Aciertos
         self.Fallos= Fallos
         self.BarcosA= BarcosA #5
@@ -93,7 +106,10 @@ class Tablero:
         self.BotonGuardar= Boton(guardar, guardar2, 1350, 590 )
         self.cursor1= Cursor()
         
-
+        pygame.mixer.init() # Inicializar todos los módulos Pygame importados
+        pygame.mixer.music.load("Adjuntos/musicafondo.wav")  # pone la cancion
+        pygame.mixer.music.play(loops=-1)  # reproduce la cancion
+        pygame.mixer.music.set_volume(0.5)  # el volumen de la musica
         
         self.Cuadro= 60 #Tamaño de los cuadros
         self.Margen= 5 #Distancia entre cuadros
@@ -788,15 +804,14 @@ class Tablero:
                 if Valor== 3:
                     self.matrizJ2[y][x]= 5
                     time.sleep(1)
-                    Fail()
-                    color= self.Fallo
-                    pygame.draw.rect(self.pantalla, color, [(self.Margen+self.Cuadro)* (columna+0.5) + self.Margen, (self.Margen+self.Cuadro)* fila + self.Margen, self.Cuadro, self.Cuadro ])
+                    FalloMusic()
+                    self.T6(fila, columna, 0)
                     time.sleep(1)
                     self.Turno= False
                 else:
                     self.T3(fila, columna)
                     self.matrizJ2[y][x]= 4
-                    acierto()
+                    AciertoMusic()
                     color= self.Acierto
                     self.RestantesA-= 1
                     time.sleep(1)
@@ -822,7 +837,7 @@ class Tablero:
         t1 = threading.Thread(target=self.tiempoSupremo)
         t1.start()      
 
-    def Animacion1(self, fila, columna):
+    def AnimacionA1(self, fila, columna):
         for imagen in range(60):
             PosY= fila*65 +7
             PosX= (columna)*65 +10
@@ -835,7 +850,31 @@ class Tablero:
         color= self.Acierto
         pygame.draw.rect(self.pantalla, color, [(self.Margen+self.Cuadro)* columna + self.Margen, (self.Margen+self.Cuadro)* fila + self.Margen, self.Cuadro, self.Cuadro ]) 
 
-    def Animacion2(self, fila, columna):
+    def AnimacionF1(self, fila, columna, imagen):
+        while imagen<8:
+            Nombre1= 'Adjuntos/gota0.png'
+            Nombre2= 'Adjuntos/gota1.png'
+            Nombre3= 'Adjuntos/gota0.png'
+            PosY= fila*65 +7
+            PosX= (columna)*65 +10
+            Explosion= pygame.image.load(Nombre1)
+            self.pantalla.blit(Explosion, [PosX, PosY])
+            pygame.display.flip()
+            time.sleep(0.02)
+            Explosion= pygame.image.load(Nombre2)
+            self.pantalla.blit(Explosion, [PosX, PosY])
+            pygame.display.flip()
+            time.sleep(0.02) 
+            Explosion= pygame.image.load(Nombre3)
+            self.pantalla.blit(Explosion, [PosX, PosY])
+            pygame.display.flip()
+            time.sleep(0.02)   
+            imagen+= 1
+
+        color= self.Fallo
+        pygame.draw.rect(self.pantalla, color, [(self.Margen+self.Cuadro)* columna + self.Margen, (self.Margen+self.Cuadro)* fila + self.Margen, self.Cuadro, self.Cuadro ])
+
+    def AnimacionA2(self, fila, columna):
         for imagen in range(60):
             PosX= (columna-10)*65 +687.5
             PosY= fila*65 +7
@@ -843,23 +882,55 @@ class Tablero:
             Explosion= pygame.image.load(Nombre)
             self.pantalla.blit(Explosion, [PosX, PosY])
             pygame.display.flip()
-            time.sleep(0.02)  
+            time.sleep(0.1)  
 
         color= self.Acierto
         pygame.draw.rect(self.pantalla, color, [(self.Margen+self.Cuadro)* (columna+0.5) + self.Margen, (self.Margen+self.Cuadro)* fila + self.Margen, self.Cuadro, self.Cuadro ])
 
+    def AnimacionF2(self, fila, columna, imagen):
+        while imagen<8:
+            Nombre1= 'Adjuntos/gota0.png'
+            Nombre2= 'Adjuntos/gota1.png'
+            Nombre3= 'Adjuntos/gota0.png'
+            PosY= fila*65 +7
+            PosX= (columna-10)*65 +687.5
+            Explosion= pygame.image.load(Nombre1)
+            self.pantalla.blit(Explosion, [PosX, PosY])
+            pygame.display.flip()
+            time.sleep(0.02)
+            Explosion= pygame.image.load(Nombre2)
+            self.pantalla.blit(Explosion, [PosX, PosY])
+            pygame.display.flip()
+            time.sleep(0.02) 
+            Explosion= pygame.image.load(Nombre3)
+            self.pantalla.blit(Explosion, [PosX, PosY])
+            pygame.display.flip()
+            time.sleep(0.1)   
+            imagen+= 1
+
+        color= self.Fallo
+        pygame.draw.rect(self.pantalla, color, [(self.Margen+self.Cuadro)* (columna+0.5) + self.Margen, (self.Margen+self.Cuadro)* fila + self.Margen, self.Cuadro, self.Cuadro ])
+
 
     def T2(self, fila, columna):
-        t2= threading.Thread(target=self.Animacion1, args=(fila, columna))
+        t2= threading.Thread(target=self.AnimacionA1, args=(fila, columna))
         t2.start()
     
     def T3(self, fila, columna):
-        t3= threading.Thread(target=self.Animacion2, args=(fila, columna))
+        t3= threading.Thread(target=self.AnimacionA2, args=(fila, columna))
         t3.start()
     
     def T4(self):
         t4= threading.Thread(target= self.Ataque())
         t4.start()
+
+    def T5(self, fila, columna, imagen):
+        t5= threading.Thread(target=self.AnimacionF1, args=(fila, columna, imagen))
+        t5.start()
+
+    def T6(self, fila, columna, imagen):
+        t6= threading.Thread(target= self.AnimacionF2, args= (fila, columna, imagen))
+        t6.start()
 
 
     def Battalla(self):
@@ -904,24 +975,22 @@ class Tablero:
 
                     if columna<10 and fila<10:
                         Cordenada= self.matrizE[fila][columna]
-                        print(Cordenada)
+               
                         if Cordenada== 3:
                             self.matrizE[fila][columna] = 5
                             self.Fallos+=1
-                            color= self.Fallo
-                            pygame.draw.rect(self.pantalla, color, [(self.Margen+self.Cuadro)* columna + self.Margen, (self.Margen+self.Cuadro)* fila + self.Margen, self.Cuadro, self.Cuadro ])
-                            Fail()
+                            self.T5(fila, columna, 0)
+                            FalloMusic()
                             messagebox.showinfo('Fallo', 'Disparo fallido')
                             self.Turno= True
-                            pygame.display.flip()
                             self.T4()
 
                         elif Cordenada!= 4:
                             self.matrizE[fila][columna] = 4
+                            AciertoMusic()
                             self.T2(fila, columna)
                             self.Aciertos+=1
                             self.RestantesE-= 1 
-                            acierto()
                             messagebox.showinfo('Acierto', 'Barco golpeado')
                                 
                             
@@ -936,7 +1005,7 @@ class Tablero:
 
         Estadisticas=('Usuario: '+ self.Nombre + '\nTiempo: ' + str(self.timerrr) + ' segundos' + '\nAceiertos: ' + str(self.Aciertos) +'\nFallos: ' + str(self.Fallos) + '\nIntentos: ' + str(self.Aciertos+self.Fallos))
         messagebox.showinfo('Estadisticas ' + Estado, Estadisticas)
-        print(Estadisticas)
+        pygame.mixer.music.stop()
         pygame.quit()
 
 

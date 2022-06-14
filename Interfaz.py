@@ -45,7 +45,7 @@ def Verifica(BarcosA, BarcosB, BarcosC, Nombre):
                 Borrar.close()
                 NuevaTabla(Posicion,1,Contenido, Puntos, Nombre)
                 messagebox.showinfo('Felicidades', 'Has entrado en el salón de la fama:')
-                Tabla()
+                Gif()
 
     else: 
         messagebox.showwarning('Saturacion', 'Baje la cantidad de Barcos.')
@@ -159,6 +159,7 @@ def Cargar(Nombre):
             tablero.Accion()
             Interfaz.deiconify()
             Puntos= tablero.Get_Puntos()
+            print(Puntos)
 
             if Puntos!=0:
                 Contenido= LeerArchivo()
@@ -169,24 +170,17 @@ def Cargar(Nombre):
                     Borrar.close()
                     NuevaTabla(Posicion,1,Contenido, Puntos, Nombre)
                     messagebox.showinfo('Felicidades', 'Has entrado en el salón de la fama:')
-                    Tabla()
+                    Gif()
+
+            return 
             
     else:
         messagebox.showwarning('Error al buscar la partida', 'La partida se guarda con su nombre de usuario.')
 
-    
 
-pygame.mixer.init()
-
-def Fail():
-    pygame.mixer.init() # Inicializar todos los módulos Pygame importados
-    pygame.mixer.music.load("Adjuntos/fallo.wav")  # pone la cancion
-    pygame.mixer.music.play(1)  # reproduce la cancion
-    pygame.mixer.music.set_volume(0.5)  # el volumen de la musica
-
-def acierto():
+def Felicidates():
     pygame.mixer.init()# Inicializar todos los módulos Pygame importados
-    pygame.mixer.music.load("Adjuntos/explosion.wav")  # pone la cancion
+    pygame.mixer.music.load("Adjuntos/victory.wav")  # pone la cancion
     pygame.mixer.music.play(1)  # reproduce la cancion
     pygame.mixer.music.set_volume(0.5)  # el volumen de la musica
 
@@ -208,11 +202,39 @@ def ayuda():
 def Salón_de_la_fama():
     salon=Toplevel()
     salon.title("Salón de la fama")
-    salon.minsize(800,533)
+    salon.minsize(400,310)
     salon.resizable(width=NO, height=NO)
     canvas2 = Canvas(salon, width=800, height=533)
     canvas2.place(x=0, y=0)
+
+#Esta fncion se encarga crear un gif
+def Gif():
+    Felicidates()
+    a=Toplevel()#Define la variable como una ventana
+    a.title("Gif") #Se define el nombre de la ventana
+    can=Canvas(a,width=400, height=310, bg="white")#Se define el tamaño
+    GifAux(can, 0, a) #Se llama a funcion auxiliar
+    a.mainloop()
     
+
+def GifAux(can, medidor, a):    
+    if medidor<10:  #Se define el condicional para la funcion recursuca
+        contador= 0
+        while contador<15:
+            Nombre_Imagen= 'f'+str(contador)+'.png' #Se define nombre de la variable para cargar la siguiente imagen
+            imagen=cargarImagen(Nombre_Imagen)
+            can.create_image(0,0,image=imagen, anchor=NW, tag="img")  #Se indica donde poner la imagen
+            can.pack() #El .pack organiza la imagen
+            can.update() 
+            contador+=1 
+            time.sleep(0.03)
+            can.delete("img") #Se elimina la imagen para cambiar a la siguiente
+        medidor+= 1
+        return GifAux(can, medidor,a )
+    a.withdraw()
+    pygame.mixer.music.stop()
+    Tabla()
+
 
 def Documentacion():
     tablero= Tablero(0, 0, 0, 0, 0, 0, "Docu", 0, 0, [], [], [], 0, 0, 0)
