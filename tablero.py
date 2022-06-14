@@ -920,7 +920,7 @@ class Tablero:
 
 
     def Accion(self):
-        if self.ColocadosC<self.BarcosC:
+        if self.ColocadosA<self.BarcosA or self.ColocadosV<self.BarcosB or self.ColocadosC<self.BarcosC:
             self.PartidaNoEmpezada()
             self.CrearTablas()
             self.ColocarBarcos()
