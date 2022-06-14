@@ -3,7 +3,7 @@
 3),Sin puesto,164
 4),Javier,146
 5),Chris,135
-6),Anonymous,130
+6),Anonymous,50
 7),Sin puesto,0
 8),Sin puesto,0
 9),Sin Puesto,0
