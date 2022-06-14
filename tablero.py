@@ -281,6 +281,14 @@ class Tablero:
                         BarcoC= pygame.image.load('Adjuntos/BarcosCV.png')
                       
                         self.pantalla.blit(BarcoC, [PosX, PosY])
+            
+            for fila in range(10):
+                for columna in range(10):
+                    valor= self.matrizJ[fila][columna]
+                    if valor==6:
+                        self.matrizJ[fila][columna]= 1
+                    elif valor==7:
+                        self.matrizJ[fila][columna]=2
 
     def ColocarBarcos(self):
         """
