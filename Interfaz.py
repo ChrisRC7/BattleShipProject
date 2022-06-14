@@ -27,11 +27,25 @@ def cargarImagen(nombre):
 
 
 def Verifica(BarcosA, BarcosB, BarcosC, Nombre):
-    
-    if (BarcosA+(BarcosB*2)+(BarcosC*4))<=100 :
-        Play(BarcosA, BarcosB, BarcosC, Nombre)
+    suma= (BarcosA+(BarcosB*2)+(BarcosC*4))
+    if suma <=100 :
+        Play(BarcosA, BarcosB, BarcosC, 0, 0, 0, Nombre, 0, 0, [], [], [], suma, suma, 0)
     else: 
         messagebox.showwarning('Saturacion', 'Baje la cantidad de Barcos.')
+
+def Transformar(Matriz):
+    NuevaMatriz=[]
+    Provicional=[]
+
+    for elemento in Matriz:
+        if elemento!=',' and elemento!='[' and elemento!=']' and elemento!=' ':
+            Provicional+= [int(elemento)]
+        elif elemento==']':
+            if Provicional!=[]:
+                NuevaMatriz+= [Provicional]
+                Provicional=[]
+    return NuevaMatriz
+
 
 def Cargar(Nombre):
     partida= (Nombre + '.txt')
@@ -41,17 +55,22 @@ def Cargar(Nombre):
             Contenido=archivo.readlines()
             archivo.close()
             Datos= Contenido[0].split('/')
-            BarcosA= Datos[0]
-            BarcosB= Datos[1]
-            BarcosC= Datos[2]
-            Jugador_Nombre= Datos[3]
-            Aciertos= Datos[4]
-            Fallos= Datos[5]
-            MatrizJ= Datos[6]
-            MatrizE= Datos[7]
-            RestantesA= Datos[8]
-            RestantesE= Datos[9]
-            Tiempo= Datos[10]
+            BarcosA= int(Datos[0])
+            BarcosB= int(Datos[1])
+            BarcosC= int(Datos[2])
+            ColocadosA= int(Datos[3])
+            ColocadosB= int(Datos[4])
+            ColocadosC= int(Datos[5])
+            Jugador_Nombre= Datos[6]
+            Aciertos= int(Datos[7])
+            Fallos= int(Datos[8])
+            matrizJ= Transformar(Datos[9])
+            matrizJ2= Transformar(Datos[10])
+            matrizE= Transformar(Datos[11])
+            RestantesA= int(Datos[12])
+            RestantesE= int(Datos[13])
+            Tiempo= int(Datos[14])
+    Play(BarcosA, BarcosB, BarcosC, ColocadosA, ColocadosB, ColocadosC, Jugador_Nombre, Aciertos, Fallos, matrizJ, matrizJ2, matrizE, RestantesA, RestantesE, Tiempo)
 
 pygame.mixer.init()
 
@@ -141,6 +160,10 @@ titulo4 = Label(Interfaz, text="Introduzca cantidad de barcos tipo C",font=("Ari
 titulo4.place(x=50, y=200)
 BarcosC = Entry(Interfaz, width=30, font=("Arial", 10), bg="grey")  # crea una caja para en num, textvariable hace una conexión entre la entry y la variable nombre
 BarcosC.place(x=50, y=230)  # lugar
+titulo5= Label(Interfaz, text="Cargar Partida",font=("Arial", 10), bg="grey")
+titulo5.place(x= 350, y= 20)
+Cargar_Partida=  Entry(Interfaz, width=30, font=("Arial", 10), bg="grey")
+Cargar_Partida.place(x= 350, y= 50)
 #Jugar= Button(Interfaz, text= "Jugar", command=lambda: TableroEnemigo())
 #Jugar.place(x= 50, y= 260)
 ######################################################################
@@ -151,6 +174,8 @@ menubar.add_command(label="Abrir",command= Abrir)
 Interfaz.config(menu= menubar)#agrega al menu
 Jugar= Button(Interfaz, text= "Jugar", command=lambda: Verifica( int(BarcosA.get()), int(BarcosB.get()), int(BarcosC.get()), Nusuario.get()))
 Jugar.place(x= 50, y= 260)
+Boton_Cargar= Button(Interfaz, text="Cargar", command= lambda: Cargar(Cargar_Partida.get()))
+Boton_Cargar.place(x=350, y= 80)
 
 
 
