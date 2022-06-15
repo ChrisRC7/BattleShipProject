@@ -1045,7 +1045,7 @@ class Tablero:
 
     def Get_Puntos(self):
         if self.Ganar==True:
-            return int(round(100+ 10000%self.timerrr,0))
+            return int(round(100+ 10000/self.timerrr,0))
         else:
             return 0
     

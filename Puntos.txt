@@ -1,10 +1,10 @@
-1),Sin puesto,165
-2),Sin puesto,164
+1),Lola,2600
+2),Sin puesto,165
 3),Sin puesto,164
-4),Javier,146
-5),Chris,135
-6),Anonymous,50
-7),Sin puesto,0
-8),Sin puesto,0
-9),Sin Puesto,0
-10),Sin Puesto,0
+4),Sin puesto,164
+5),Javier,146
+6),Chris,135
+7),Josue,112
+8),Jason,100
+9),Anonymous,50
+10),Sin puesto,0
