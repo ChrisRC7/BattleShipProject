@@ -1,6 +1,5 @@
-from multiprocessing.connection import wait
 from pygame import *
-import os, pygame, random
+import pygame, random
 import time
 import threading
 from tkinter import messagebox
