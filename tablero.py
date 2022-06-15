@@ -899,7 +899,7 @@ class Tablero:
             Explosion= pygame.image.load(Nombre)
             self.pantalla.blit(Explosion, [PosX, PosY])
             pygame.display.flip()
-            time.sleep(0.1)  
+            time.sleep(0.02)  
 
         color= self.Acierto
         pygame.draw.rect(self.pantalla, color, [(self.Margen+self.Cuadro)* (columna+0.5) + self.Margen, (self.Margen+self.Cuadro)* fila + self.Margen, self.Cuadro, self.Cuadro ])
@@ -1002,7 +1002,7 @@ class Tablero:
                             self.Turno= True
                             self.T4()
 
-                        elif Cordenada!= 4:
+                        elif Cordenada!= 4 and Cordenada!=5:
                             self.matrizE[fila][columna] = 4
                             AciertoMusic()
                             self.T2(fila, columna)
